@@ -48,8 +48,10 @@
             }
             #container{
                 position:absolute;
-                top:540px;
+                top:670px;
                 left:20px;
+                width:500;
+                height: 300;
             }
             #sentiment {
                 width:500;
@@ -68,18 +70,15 @@
                 top:630;
                 left:20;
             }
-            #container {
-                position: absolute;
-                top:650;
-                left:20;
-            }
+            
             #chartContainer {
                 position: absolute;
-                top: 250;
+                top: 350;
                 left: 540;
                 height: 300;
                 width: 500;
             }
+            
         </style>
     </head>
     
@@ -109,9 +108,11 @@
         </div>
         
         <div id="heatmap"></div>
-        <div id="container" style="height: 300px; width:700px"></div>
+        <div id="container" ></div>
         <!-- <div id="sentiment"> </div> -->
         <div id="chartContainer"></div>
+        
+        
     </body>
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"> </script>
@@ -156,12 +157,13 @@
                 .attr("stroke","#fff");
 
         cells.append("rect")
+        
         .attr( "x" , function(d) { console.log(d); return d.x; })
         .attr("y", function(d) { return d.y; })
         .attr("width", function(d) { return d.dx; })
         .attr("height", function(d) { return d.dy; })
         .attr("fill", function(d){return d.children ? null:color(d.parent.name); })
-        .on("click", function(d) {changestock(d);})
+        .on("click", function(d) {changestock1(d);})
         //.on("click", function(d) {renderBar(d);})
         .on('mouseover',function(d){ tempcolor=this.style.fill;
      d3.select(this).transition().delay(100).duration(500).style('opacity',0.8)})
@@ -172,8 +174,11 @@
         .attr("x",function(d) {return d.x + d.dx/2})
         .attr("y",function(d) {return d.y + d.dy/2})
         .attr("text-anchor","middle")
+        .attr("font-size", "11")
+        
+        .attr("font-weight", "normal")
         .text(function(d){ return d.children? null :d.name;})
-        .on("click", function(d) {changestock(d);})
+        .on("click", function(d) {changestock1(d);})
         //.on("click", function(d) {renderBar(d);})
         
     });
@@ -206,7 +211,7 @@
         .attr("width", function(d) { return d.dx; })
         .attr("height", function(d) { return d.dy; })
         .attr("fill", function(d){return d.children ? null:color(d.parent.name); })
-        .on("click", function(d) {changestock(d);})
+        .on("click", function(d) {changestock2(d);})
         //.on("click", function(d) {renderBar(d);})
         .on('mouseover',function(d){ tempcolor=this.style.fill;
      d3.select(this).transition().delay(100).duration(500).style('opacity',0.8)})
@@ -218,7 +223,7 @@
         .attr("y",function(d) {return d.y + d.dy/2})
         .attr("text-anchor","middle")
         .text(function(d){ return d.children? null :d.name;})
-        .on("click", function(d) {changestock(d);})
+        .on("click", function(d) {changestock2(d);})
         //.on("click", function(d) {renderBar(d);})
         
     });
@@ -259,10 +264,10 @@
         
         
     
-        function changestock(a) {
+        function changestock1(a) {
 
         $(function() {
-            var temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + a.name + "&d=3&e=20&f=2016&g=d&a=2&b=20&c=2016&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+            var temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + a.name + "&d=11&e=11&f=2015&g=d&a=11&b=5&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
 
             $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
 
@@ -362,7 +367,111 @@
 
         chart.render();
         }
-    
+        
+        function changestock2(a) {
+
+        $(function() {
+            var temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + a.name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+
+            $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
+
+                //console.log(data.query.results);
+                var data = data.query.results.row;
+                data = data.splice(1, data.length);
+                //console.log(data);
+
+                var processedData = [];
+                $(data).each(function(index, value) {
+                    //console.log(Date.parse(value.Date).getTime());
+                    //console.log(Date.parse(value.Date));
+                    processedData.push([Date.parse(value.Date), parseFloat(value.Open), parseFloat(value.High), parseFloat(value.Low), parseFloat(value.Close)]);
+                });
+                processedData = processedData.reverse();
+                //console.log(processedData);
+
+                // Create the chart
+                $('#container').highcharts('StockChart', {
+
+
+                    rangeSelector: {
+                        selected: 1
+                    },
+
+                    title: {
+                        text: a.name + ' Stock Price'
+                    },
+
+                    series: [{
+                        type: 'candlestick',
+                        name: a.name + ' Stock Price',
+                        data: processedData,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }]
+                });
+            });
+
+        });
+        //bar chart
+
+        //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
+
+        var da = a;
+        //      console.log(a)
+        var bardata = [];
+        var arr1 = da.relatedSymbols;
+        //console.log(b)         
+        for (var i = 0; i < arr1.length; i++) {
+            bardata.push({
+                label: arr1[i].relate_count,
+                y: arr1[i].relate_count,
+                indexLabel: arr1[i].name
+            });
+            // console.log(arr1[i])
+        }
+        
+
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Most related stock",
+                fontFamily: "Verdana",
+                fontColor: "Peru",
+                fontSize: 28
+
+            },
+            animationEnabled: true,
+            axisY: {
+                tickThickness: 0,
+                lineThickness: 0,
+                valueFormatString: " ",
+                gridThickness: 0
+            },
+            axisX: {
+                tickThickness: 0,
+                lineThickness: 0,
+                labelFontSize: 18,
+                labelFontColor: "Peru"
+
+            },
+            data: [{
+                indexLabelFontSize: 26,
+                toolTipContent: "<span style='\"'color: {color};'\"'><strong>{indexLabel}</strong></span><span style='\"'font-size: 20px; color:peru '\"'><strong>{y}</strong></span>",
+
+                indexLabelPlacement: "inside",
+                indexLabelFontColor: "white",
+                indexLabelFontWeight: 600,
+                indexLabelFontFamily: "Verdana",
+                color: "#1565C0",
+                type: "bar",
+                dataPoints: bardata
+            }]
+        });
+
+        chart.render();
+        }
+        
     
     
         
