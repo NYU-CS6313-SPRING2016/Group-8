@@ -1,4 +1,5 @@
 import json
+#...
 inputFile = 'Dec-07-11.json'
 fin = open(inputFile,'r')
 lines = fin.readlines()
