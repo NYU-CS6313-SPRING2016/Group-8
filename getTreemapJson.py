@@ -91,7 +91,7 @@ symbolList.sort(key = lambda x: x.count, reverse = True)
 
 # store symbols with top ten largest volume
 symbolSorted = []    # a list used to store sorted symbols. This is a list of dict
-for i in range(0,50):
+for i in range(0,30):
 #    print (symbolList[i].symbol)
     symbolSorted.append(symbolDict[symbolList[i].symbol])
     if symbolList[i].sector in sectorDict:
