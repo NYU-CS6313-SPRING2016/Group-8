@@ -1,0 +1,580 @@
+<html>
+    <head>
+        <title> StockTweets </title>
+        <style>
+            /*wordcloud*/
+             body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+    .legend {
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+    }
+    .bld {
+        font-weight: bold;
+    }
+            
+    /*finish wordcloud*/
+            li {
+                list-style: none;
+            }
+            #week {
+                position: absolute;
+                left:20;
+                    
+            }
+            #weekSelection {
+                position:absolute;
+                left:200
+            }
+            #streamList {
+                list-style: none;
+                padding: 10;
+
+                width:600;
+            }
+            .message  {
+                list-style: none;
+                padding: 15;
+                float:left;
+                font-size:14;
+            }
+            .time, .sentiment {
+                list-style: none;
+                padding-top: 10;
+                color:darkblue;
+                font-size:12;
+            }
+            #stream{
+                transform:translate(520px,0);
+                overflow-y: visible;
+            }
+            #streamList {
+                height: 440;
+                width: 650;
+                overflow-y: scroll;
+            }
+            #heatmap{
+                position:absolute;
+                top:120px;
+                left:20px;
+            }
+            #container{
+                position:absolute;
+                top:670px;
+                left:20px;
+                width:500;
+                height: 300;
+            }
+            #sentiment {
+                width:500;
+                height:100;
+                position:absolute;
+                top: 300;
+                left: 600;
+            }
+            #treeTitle {
+                position: absolute;
+                top:90;
+                left:20;
+            }
+            #priceTitle {
+                position: absolute;
+                top:630;
+                left:20;
+            }
+            
+            #chartContainer {
+                position: absolute;
+                top: 350;
+                left: 540;
+                height: 300;
+                width: 500;
+            }
+            
+        </style>
+    </head>
+    
+    
+    <body>
+        <h1 align="center">Stock Twits Comments Analysis</h1>
+        
+        <div id="week">
+            Please select a week:
+        </div>
+        
+        <select id="weekSelection" onchange="changeInput(this.options[this.options.selectedIndex].value)">
+          <option value="">Please Select</option>
+          <option value="1">Dec 07-11</option>
+          <option value="2">Dec 14-18</option>
+        </select>
+        
+        <div id="treeTitle">
+            Weekly Hotest Stocks:
+        </div>
+        <!-- <div style="width: 700px;" style="height: 400px;"  id = "stream"><li id="streamList">
+            
+        <li></div> -->
+        
+        <div id="priceTitle">
+            Weekly Stock Price:
+        </div>
+        
+        <div id="heatmap"></div>
+        <div id="container" ></div>
+        <!-- <div id="sentiment"> </div> -->
+        <div id="chartContainer"></div>
+        <div style="width: 40%;">
+            <div class="legend">
+        Commonly used words are larger and slightly faded in color.  Less common words are smaller and darker.
+            </div>
+
+        </div>
+
+        
+    </body>
+    
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"> </script>
+    <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>   
+        <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="d3.layout.cloud.js"></script>
+    <script>
+        
+        function changeInput(d) {
+            if(d == "1") {
+                renderTreemap(1);
+                
+            } else {
+                renderTreemap(2);
+            }
+        
+    
+        }
+        
+        function renderTreemap(i) {
+            if(i == 1) {
+                var color = d3.scale.category10();
+                d3.select("svg").remove();
+        var canvas = d3.select("#heatmap").append("svg")
+                .attr("width",500)
+                .attr("height",500);
+                d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json" ,function(data){
+
+        var treemap=d3.layout.treemap()
+        .size([500,500])
+        .nodes(data);
+
+
+
+        var cells = canvas.selectAll(".cell")
+                .style("position", "relative")
+                .data(treemap)
+                .enter()
+                .append("g")
+                .attr("class","cell")
+                .attr("stroke","#fff");
+
+        cells.append("rect")
+        
+        .attr( "x" , function(d) {return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("width", function(d) { return d.dx; })
+        .attr("height", function(d) { return d.dy; })
+        .attr("fill", function(d){return d.children ? null:color(d.parent.name); })
+        .on("click", function(d) {changestock1(d);})
+        //.on("click", function(d) {renderBar(d);})
+        .on('mouseover',function(d){ tempcolor=this.style.fill;
+     d3.select(this).transition().delay(100).duration(500).style('opacity',0.8)})
+        .on('mouseout',function(d){d3.select(this).transition().delay(500).duration(100).style('opacity',1).style('fill',tempcolor)});
+
+
+        cells.append("text")
+        .attr("x",function(d) {return d.x + d.dx/2})
+        .attr("y",function(d) {return d.y + d.dy/2})
+        .attr("text-anchor","middle")
+        .attr("font-size", "11")
+        
+        .attr("font-weight", "normal")
+        .text(function(d){ return d.children? null :d.name;})
+        .on("click", function(d) {changestock1(d);})
+        //.on("click", function(d) {renderBar(d);})
+        
+    });
+            } else if(i == 2) {
+                var color = d3.scale.category10();
+                d3.select("svg").remove();
+    var canvas = d3.select("#heatmap").append("svg")
+                .attr("width",500)
+                .attr("height",500);
+                d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict121418.json" ,function(data){
+
+        var treemap=d3.layout.treemap()
+        .size([500,500])
+        .nodes(data);
+
+    
+
+        var cells = canvas.selectAll(".cell")
+                .style("position", "relative")
+                .data(treemap)
+                .enter()
+                .append("g")
+                .attr("class","cell")
+                .attr("stroke","#fff");
+
+        cells.append("rect")
+        .attr( "x" , function(d) { return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("width", function(d) { return d.dx; })
+        .attr("height", function(d) { return d.dy; })
+        .attr("fill", function(d){return d.children ? null:color(d.parent.name); })
+        .on("click", function(d) {changestock2(d);})
+        //.on("click", function(d) {renderBar(d);})
+        .on('mouseover',function(d){ tempcolor=this.style.fill;
+     d3.select(this).transition().delay(100).duration(500).style('opacity',0.8)})
+        .on('mouseout',function(d){d3.select(this).transition().delay(500).duration(100).style('opacity',1).style('fill',tempcolor)});
+
+
+        cells.append("text")
+        .attr("x",function(d) {return d.x + d.dx/2})
+        .attr("y",function(d) {return d.y + d.dy/2})
+        .attr("text-anchor","middle")
+        .text(function(d){ return d.children? null :d.name;})
+        .on("click", function(d) {changestock2(d);})
+        //.on("click", function(d) {renderBar(d);})
+        
+    });
+            }
+            
+        }
+        
+        /* var list = d3.select("#streamList");
+        
+        function renderList(data) {
+            //console.log(data);
+            
+            
+            list.selectAll("li")
+                .data(data)
+                .enter()
+                .append("li")
+                .attr("class", "message")
+                .text(function(d) {return  d.body})
+                .append("li")
+                .attr("class", "time")
+                .html(function(d) {return "Time: " + d.created_at})
+                .append("li")
+                .attr("class", "sentiment")
+                .html(function(d) {return "Sentiment: " + getSentiment(d)});
+        }
+            function getSentiment(data) {
+            if(data.entities.sentiment == null) {
+                return "null";
+            } else {
+                return data.entities.sentiment.basic;
+            }
+        }
+        
+        d3.json('https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/streamList.json', function(error, result){
+            renderList(result);
+        }) */
+        
+        
+    
+        function changestock1(a) {
+
+        $(function() {
+            var temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + a.name + "&d=11&e=11&f=2015&g=d&a=11&b=5&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+
+            $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
+
+                //console.log(data.query.results);
+                var data = data.query.results.row;
+                data = data.splice(1, data.length);
+                //console.log(data);
+
+                var processedData = [];
+                $(data).each(function(index, value) {
+                    //console.log(Date.parse(value.Date).getTime());
+                    //console.log(Date.parse(value.Date));
+                    processedData.push([Date.parse(value.Date), parseFloat(value.Open), parseFloat(value.High), parseFloat(value.Low), parseFloat(value.Close)]);
+                });
+                processedData = processedData.reverse();
+                //console.log(processedData);
+
+                // Create the chart
+                $('#container').highcharts('StockChart', {
+
+
+                    rangeSelector: {
+                        selected: 1
+                    },
+
+                    title: {
+                        text: a.name + ' Stock Price'
+                    },
+
+                    series: [{
+                        type: 'candlestick',
+                        name: a.name + ' Stock Price',
+                        data: processedData,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }]
+                });
+            });
+
+        });
+        //bar chart
+
+        //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
+
+        var da = a;
+        //      console.log(a)
+        var bardata = [];
+        var arr1 = da.relatedSymbols;
+        //console.log(b)         
+        for (var i = 0; i < arr1.length; i++) {
+            bardata.push({
+                label: arr1[i].relate_count,
+                y: arr1[i].relate_count,
+                indexLabel: arr1[i].name
+            });
+            // console.log(arr1[i])
+        }
+        
+
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Most related stock",
+                fontFamily: "Verdana",
+                fontColor: "Peru",
+                fontSize: 28
+
+            },
+            animationEnabled: true,
+            axisY: {
+                tickThickness: 0,
+                lineThickness: 0,
+                valueFormatString: " ",
+                gridThickness: 0
+            },
+            axisX: {
+                tickThickness: 0,
+                lineThickness: 0,
+                labelFontSize: 18,
+                labelFontColor: "Peru"
+
+            },
+            data: [{
+                indexLabelFontSize: 26,
+                toolTipContent: "<span style='\"'color: {color};'\"'><strong>{indexLabel}</strong></span><span style='\"'font-size: 20px; color:peru '\"'><strong>{y}</strong></span>",
+
+                indexLabelPlacement: "inside",
+                indexLabelFontColor: "white",
+                indexLabelFontWeight: 600,
+                indexLabelFontFamily: "Verdana",
+                color: "#1565C0",
+                type: "bar",
+                dataPoints: bardata
+            }]
+        });
+
+        chart.render();
+        }
+        
+        function changestock2(a) {
+
+        $(function() {
+            var temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + a.name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+
+            $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
+
+                //console.log(data.query.results);
+                var data = data.query.results.row;
+                data = data.splice(1, data.length);
+                //console.log(data);
+
+                var processedData = [];
+                $(data).each(function(index, value) {
+                    //console.log(Date.parse(value.Date).getTime());
+                    //console.log(Date.parse(value.Date));
+                    processedData.push([Date.parse(value.Date), parseFloat(value.Open), parseFloat(value.High), parseFloat(value.Low), parseFloat(value.Close)]);
+                });
+                processedData = processedData.reverse();
+                //console.log(processedData);
+
+                // Create the chart
+                $('#container').highcharts('StockChart', {
+
+
+                    rangeSelector: {
+                        selected: 1
+                    },
+
+                    title: {
+                        text: a.name + ' Stock Price'
+                    },
+
+                    series: [{
+                        type: 'candlestick',
+                        name: a.name + ' Stock Price',
+                        data: processedData,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }]
+                });
+            });
+
+        });
+        //bar chart
+
+        //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
+
+        var da = a;
+        //      console.log(a)
+        var bardata = [];
+        var arr1 = da.relatedSymbols;
+        //console.log(b)         
+        for (var i = 0; i < arr1.length; i++) {
+            bardata.push({
+                label: arr1[i].relate_count,
+                y: arr1[i].relate_count,
+                indexLabel: arr1[i].name
+            });
+            // console.log(arr1[i])
+        }
+        
+
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Most related stock",
+                fontFamily: "Verdana",
+                fontColor: "Peru",
+                fontSize: 28
+
+            },
+            animationEnabled: true,
+            axisY: {
+                tickThickness: 0,
+                lineThickness: 0,
+                valueFormatString: " ",
+                gridThickness: 0
+            },
+            axisX: {
+                tickThickness: 0,
+                lineThickness: 0,
+                labelFontSize: 18,
+                labelFontColor: "Peru"
+
+            },
+            data: [{
+                indexLabelFontSize: 26,
+                toolTipContent: "<span style='\"'color: {color};'\"'><strong>{indexLabel}</strong></span><span style='\"'font-size: 20px; color:peru '\"'><strong>{y}</strong></span>",
+
+                indexLabelPlacement: "inside",
+                indexLabelFontColor: "white",
+                indexLabelFontWeight: 600,
+                indexLabelFontFamily: "Verdana",
+                color: "#1565C0",
+                type: "bar",
+                dataPoints: bardata
+            }]
+        });
+
+        chart.render();
+        }
+        
+    
+    
+        
+    
+    
+   
+        
+        /* d3.json('sentimentList.json', function(error, result){
+            //renderSentiment(result);
+        })
+        
+        
+        
+        var b = d3.rgb(255,0,0);
+        var a = d3.rgb(0,255,0);
+        
+    
+        var svg = d3.select("#sentiment").append("svg")
+            .attr("id", "sentimentBar")
+           .attr("width", 400)
+           .attr("height", 300);
+        var defs = svg.append("defs");
+
+        var linearGradient = defs.append("linearGradient")
+                        .attr("id","linearColor")
+                        .attr("x1","0%")
+                        .attr("y1","0%")
+                        .attr("x2","100%")
+                        .attr("y2","0%");
+
+        var stop1 = linearGradient.append("stop")
+                .attr("offset","0%")
+                .style("stop-color",a.toString());
+
+        var stop2 = linearGradient.append("stop")
+                .attr("offset","100%")
+                .style("stop-color",b.toString());
+
+
+        var colorRect = svg.append("rect")
+                .attr("x", 15)
+                .attr("y", 200)
+                .attr("width", 350)
+                .attr("height", 30)
+                .style("fill","url(#" + linearGradient.attr("id") + ")"); 
+                
+                */
+    </script>
+<script>
+    
+    var color = d3.scale.linear()
+            .domain([0,2,4,6,8,10,15,18,20,30,100])
+            .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+d3.json("wordclouddata.json",function(data){
+    d3.layout.cloud().size([400, 400])
+            .words(data)
+            .rotate(0)
+            .fontSize(function(d) { return d.size/4; })
+            .on("end", draw)
+            .start();
+
+    function draw(words) {
+        d3.select("body").append("svg")
+                .attr("width", 450)
+                .attr("height", 350)
+                .attr("class", "wordcloud")
+                .append("g")
+                // without the transform, words words would get cutoff to the left and top, they would
+                // appear outside of the SVG area
+                .attr("transform", "translate(320,200)")
+                .selectAll("text")
+                .data(words)
+                .enter().append("text")
+                .style("font-size", function(d) { return d.size/4 + "px"; })
+                .style("fill", function(d, i) { return color(i); })
+                .attr("transform", function(d) {
+                    return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                })
+                .text(function(d) { return d.text; });
+    }
+})
+</script>
+
+
+</html>
