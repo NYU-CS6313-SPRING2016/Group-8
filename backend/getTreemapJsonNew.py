@@ -1,7 +1,7 @@
 import json
 #...
-#inputFile = 'Dec-07-11.json'
-inputFile = 'Nov-16-20.json'
+inputFile = 'Dec-30-04.json'
+#inputFile = 'Nov-23-27.json'
 fin = open(inputFile,'r')
 lines = fin.readlines()
 symbolDict = {}     # creat a new dict, symbolDict = dict()
@@ -136,7 +136,7 @@ for SECTOR in sectorDict:
 treeDict['children'] = sectorList
 
 #with open('TreemapDict120711.json', 'w') as f:
-with open('TreemapDict111620.json', 'w') as f:
+with open('TreemapDict123004.json', 'w') as f:
 #    for item in treeDict.items():
         json.dump(treeDict, f)
 #        f.write('\n')
