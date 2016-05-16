@@ -11,7 +11,7 @@ function render_treemap(data, slt) {
     var yscale = d3.scale.linear().range([0, chartHeight]);
     var color = d3.scale.category10();
     var headerHeight = 20;
-    var headerColor = "#777777";
+    var headerColor = "#999999";
     var transitionDuration = 500;
     var root;
     var node;
@@ -56,7 +56,7 @@ function render_treemap(data, slt) {
                 return Math.max(0.01, d.dx);
             })
             .attr("height", function(d) { return d.dy; })
-            .style("fill", "#555555");
+            .style("fill", "#999999");
         parentEnterTransition.append('foreignObject')
             .attr("class", "foreignObject")
             .append("xhtml:body")
@@ -74,7 +74,7 @@ function render_treemap(data, slt) {
                 return Math.max(0.01, d.dx);
             })
             .attr("height", function(d) { return d.dy; })
-            .style("fill", "#555555");
+            .style("fill", "#999999");
         parentUpdateTransition.select(".foreignObject")
             .attr("width", function(d) {
                 return Math.max(0.01, d.dx);
@@ -98,12 +98,21 @@ function render_treemap(data, slt) {
             .append("g")
             .attr("class", "cell child")
             .attr("id", function(d){ return d.s_id })
+            .style('stroke-width', '2px')
+            .style('stroke', '#aaaaaa')
+            .style('stroke-opacity', 0.5)
             /*---------------------------------------------------------- change one below------------------------------------------------------------*/
             .on("click", function(d) {    // disable this, can't zoom into sectors
 //                zoom(node === d.parent ? root : d.parent);
                     if (node !== d.parent) {
                         zoom(d.parent);
                     } else {
+                        d3.selectAll("g.cell.child").style('stroke-width', '2px')
+                                                    .style('stroke', '#aaaaaa')
+                                                    .style('stroke-opacity', 0.5);
+                        d3.select(this).style('stroke', 'black')
+                                        .style('stroke-width', '3px')
+                                        .style('stroke-opacity', 1)
                         changestock(d, d.name, slt);
                     }
             })
@@ -207,7 +216,7 @@ function render_treemap(data, slt) {
                             top: d3.event.clientY,
                             left: (d3.event.clientX + 10),
                             opacity: 1,
-                        }).text("Symbol: " + d.name + '\nTitle: ' + d.title + '\nSector: '+ d.parent.name+ '\nExchange: ' + d.exchange)     // inside the text parameter we do not call another function
+                        }).text("Symbol: " + d.name + '\nTitle: ' + d.title + '\nSector: '+ d.parent.name+ '\nExchange: ' + d.exchange +'\nMessage Volume:' + d.value)     // inside the text parameter we do not call another function
                     })
                     .on("mouseleave", function(d) {
                  //       unHighlight();
@@ -345,7 +354,7 @@ function render_treemap(data, slt) {
             })
             .style("fill", function(d) {
                 if (d.children) {
-                    return "#777777";
+                    return "#999999";
                 } else if (d.sentiment.sentiment_value > 0) {
                     return "#A3E670";   // bull
                 } else {
