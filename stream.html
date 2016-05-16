@@ -33,7 +33,7 @@
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"> </script>
     <script>
         var list = d3.select("#streamList");
-        
+        var symbol = "AAPL";
         function renderList(data) {
             //console.log(data);
             
@@ -46,10 +46,13 @@
                 .text(function(d) {return  d.body})
                 .append("li")
                 .attr("class", "time")
-                .html(function(d) {return "Time: " + d.created_at})
+                .html(function(d) {return "Time: " + d.crated_at})
                 .append("li")
                 .attr("class", "sentiment")
-                .html(function(d) {return "Sentiment: " + getSentiment(d)});
+                .html(function(d) {return "Sentiment: " + d.sentiment})
+                .append("li")
+                .attr("class", "sentiment")
+                .html(function(d) {return "Sentiment: " + d.symbol});
 //                .append("li")
 //                .attr("class", "symbol")
 //                .html(function(d) {return "Symbol: " + getSymbol(d)});
@@ -70,8 +73,9 @@
                 return data.entities.sentiment.basic;
             }
         }
-        d3.json('streamList.json', function(error, result){
-            renderList(result);
+        d3.json('https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/stream.json', function(error, result){
+            console.log(result[symbol]);
+            renderList(result[symbol]);
         })
     </script>
     

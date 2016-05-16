@@ -1,0 +1,397 @@
+<html>
+    <head>
+        <title> StockTweets </title>
+        <style>
+            li {
+                list-style: none;
+            }
+            #week {
+                position: absolute;
+                left:20;
+                    
+            }
+            #weekSelection {
+                position:absolute;
+                left:200
+            }
+            #streamList {
+                list-style: none;
+                padding: 10;
+
+                width:600;
+            }
+            .message  {
+                list-style: none;
+                padding: 15;
+                float:left;
+                font-size:14;
+            }
+            .time, .sentiment {
+                list-style: none;
+                padding-top: 10;
+                color:darkblue;
+                font-size:12;
+            }
+            #stream{
+                transform:translate(520px,0);
+                overflow-y: visible;
+            }
+            #streamList {
+                height: 440;
+                width: 650;
+                overflow-y: scroll;
+            }
+            #heatmap{
+                position:absolute;
+                top:120px;
+                left:20px;
+            }
+            #container{
+                position:absolute;
+                top:670px;
+                left:20px;
+                width:500;
+                height: 300;
+            }
+            #sentiment {
+                width:500;
+                height:100;
+                position:absolute;
+                top: 300;
+                left: 600;
+            }
+            #treeTitle {
+                position: absolute;
+                top:90;
+                left:20;
+            }
+            #priceTitle {
+                position: absolute;
+                top:630;
+                left:20;
+            }
+            
+            #chartContainer {
+                position: absolute;
+                top: 350;
+                left: 540;
+                height: 300;
+                width: 500;
+            }
+            
+        </style>
+    </head>
+    
+    
+    <body>
+        <h1 align="center">Stock Twits Comments Analysis</h1>
+        
+        <div id="week">
+            Please select a week:
+        </div>
+        
+        <select id="weekSelection" onchange="changeInput(this.options[this.options.selectedIndex].value)">
+          <option value="">Please Select</option>
+          <option value="1">Dec 07-11</option>
+          <option value="2">Dec 14-18</option>
+        </select>
+        
+        <div id="treeTitle">
+            Weekly Hotest Stocks:
+        </div>
+        <!-- <div style="width: 700px;" style="height: 400px;"  id = "stream"><li id="streamList">
+            
+        <li></div> -->
+        
+        <div id="priceTitle">
+            Weekly Stock Price:
+        </div>
+        
+        <div id="heatmap"></div>
+        <div id="container" ></div>
+        <!-- <div id="sentiment"> </div> -->
+        <div id="chartContainer"></div>
+        
+        
+    </body>
+    
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"> </script>
+    <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>   
+        <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script>
+        
+        function changeInput(slt) {
+           renderTreemap(slt);
+        
+    
+        }
+        
+        function renderTreemap(slt) {
+            var file;
+            if(slt == "1") {
+                file = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json"; }
+            if(slt == "2") {
+                file = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict121418.json" }
+            
+                var color = d3.scale.category10();
+                d3.select("svg").remove();
+        var canvas = d3.select("#heatmap").append("svg")
+                .attr("width",500)
+                .attr("height",500);
+                d3.json(file ,function(data){
+
+        var treemap=d3.layout.treemap()
+        .size([500,500])
+        .nodes(data);
+
+        
+
+
+        var cells = canvas.selectAll(".cell")
+                .style("position", "relative")
+                .data(treemap)
+                .enter()
+                .append("g")
+                .attr("class","cell")
+                .attr("stroke","#fff");
+
+        cells.append("rect")
+        
+        .attr( "x" , function(d) {  return d.x; })
+        .attr("y", function(d) { return d.y; })
+        .attr("width", function(d) { return d.dx; })
+        .attr("height", function(d) { return d.dy; })
+        .attr("fill", function(d){return d.children ? null:color(d.parent.name); })
+        .on("click", function(d) {changestock(d, d.name, slt);})
+        //.on("click", function(d) {renderBar(d);})
+        .on('mouseover',function(d){ tempcolor=this.style.fill;
+     d3.select(this).transition().delay(100).duration(500).style('opacity',0.8)})
+        .on('mouseout',function(d){d3.select(this).transition().delay(500).duration(100).style('opacity',1).style('fill',tempcolor)});
+
+
+        cells.append("text")
+        .attr("x",function(d) {return d.x + d.dx/2})
+        .attr("y",function(d) {return d.y + d.dy/2})
+        .attr("text-anchor","middle")
+        .attr("font-size", "11")
+        
+        .attr("font-weight", "normal")
+        .text(function(d){ return d.children? null :d.name;})
+        .on("click", function(d) {changestock(d, d.name, slt);})
+        //.on("click", function(d) {renderBar(d);})
+        
+    });
+            } 
+            
+        
+        
+        /* var list = d3.select("#streamList");
+        
+        function renderList(data) {
+            //console.log(data);
+            
+            
+            list.selectAll("li")
+                .data(data)
+                .enter()
+                .append("li")
+                .attr("class", "message")
+                .text(function(d) {return  d.body})
+                .append("li")
+                .attr("class", "time")
+                .html(function(d) {return "Time: " + d.created_at})
+                .append("li")
+                .attr("class", "sentiment")
+                .html(function(d) {return "Sentiment: " + getSentiment(d)});
+        }
+            function getSentiment(data) {
+            if(data.entities.sentiment == null) {
+                return "null";
+            } else {
+                return data.entities.sentiment.basic;
+            }
+        }
+        
+        d3.json('https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/streamList.json', function(error, result){
+            renderList(result);
+        }) */
+        
+        
+    
+        function changestock(a, name, slt) {
+            var temp;
+            switch(slt)
+            {
+            case "1":
+              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=11&f=2015&g=d&a=11&b=5&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+              break;
+            case "2":
+              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+              break;
+            
+            }
+            
+                
+        $(function() {
+            
+            
+
+            $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
+
+                //console.log(data.query.results);
+                var data = data.query.results.row;
+                data = data.splice(1, data.length);
+                //console.log(data);
+
+                var processedData = [];
+                $(data).each(function(index, value) {
+                    //console.log(Date.parse(value.Date).getTime());
+                    //console.log(Date.parse(value.Date));
+                    processedData.push([Date.parse(value.Date), parseFloat(value.Open), parseFloat(value.High), parseFloat(value.Low), parseFloat(value.Close)]);
+                });
+                processedData = processedData.reverse();
+                //console.log(processedData);
+
+                // Create the chart
+                $('#container').highcharts('StockChart', {
+
+
+                    rangeSelector: {
+                        selected: 1
+                    },
+
+                    title: {
+                        text: name + ' Stock Price'
+                    },
+
+                    series: [{
+                        type: 'candlestick',
+                        name: name + ' Stock Price',
+                        data: processedData,
+                        tooltip: {
+                            valueDecimals: 2
+                        }
+                    }]
+                });
+            });
+
+        });
+        //bar chart
+
+        //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
+
+        var da = a;
+        //      console.log(a)
+        var bardata = [];
+        var arr1 = da.relatedSymbols;
+        //console.log(b)         
+        for (var i = 0; i < arr1.length; i++) {
+            bardata.push({
+                label: arr1[i].relate_count,
+                y: arr1[i].relate_count,
+                indexLabel: arr1[i].name
+            });
+            // console.log(arr1[i])
+        }
+        
+
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: name + "'s Most related stock",
+                fontFamily: "Verdana",
+                fontColor: "Peru",
+                fontSize: 28
+
+            },
+            animationEnabled: true,
+            axisY: {
+                tickThickness: 0,
+                lineThickness: 0,
+                valueFormatString: " ",
+                gridThickness: 0
+            },
+            axisX: {
+                tickThickness: 0,
+                lineThickness: 0,
+                labelFontSize: 18,
+                labelFontColor: "Peru"
+
+            },
+            data: [{
+                indexLabelFontSize: 26,
+                toolTipContent: "<span style='\"'color: {color};'\"'><strong>{indexLabel}</strong></span><span style='\"'font-size: 20px; color:peru '\"'><strong>{y}</strong></span>",
+
+                indexLabelPlacement: "inside",
+                indexLabelFontColor: "white",
+                indexLabelFontWeight: 600,
+                indexLabelFontFamily: "Verdana",
+                color: "#1565C0",
+                type: "bar",
+                dataPoints: bardata,
+                click: function(e){
+                    console.log(e);
+                    changestock(a, e.dataPoint.indexLabel, slt);
+                }
+                
+            }]
+        });
+
+        chart.render();
+        }
+        
+        
+        
+    
+    
+        
+    
+    
+   
+        
+        /* d3.json('sentimentList.json', function(error, result){
+            //renderSentiment(result);
+        })
+        
+        
+        
+        var b = d3.rgb(255,0,0);
+        var a = d3.rgb(0,255,0);
+        
+    
+        var svg = d3.select("#sentiment").append("svg")
+            .attr("id", "sentimentBar")
+           .attr("width", 400)
+           .attr("height", 300);
+        var defs = svg.append("defs");
+
+        var linearGradient = defs.append("linearGradient")
+                        .attr("id","linearColor")
+                        .attr("x1","0%")
+                        .attr("y1","0%")
+                        .attr("x2","100%")
+                        .attr("y2","0%");
+
+        var stop1 = linearGradient.append("stop")
+                .attr("offset","0%")
+                .style("stop-color",a.toString());
+
+        var stop2 = linearGradient.append("stop")
+                .attr("offset","100%")
+                .style("stop-color",b.toString());
+
+
+        var colorRect = svg.append("rect")
+                .attr("x", 15)
+                .attr("y", 200)
+                .attr("width", 350)
+                .attr("height", 30)
+                .style("fill","url(#" + linearGradient.attr("id") + ")"); 
+                
+                */
+    </script>
+
+
+
+</html>
