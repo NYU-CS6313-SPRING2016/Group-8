@@ -180,8 +180,11 @@
         </div>
         
         <select id="weekSelection" onchange="changeInput(this.options[this.options.selectedIndex].value)">
-          <option value="1">Dec 07-11</option>
-          <option value="2">Dec 14-18</option>
+          <option value="1">Dec 14-18</option>
+          <option value="2">Dec 07-11</option>
+          <option value="3">Nov 30 - Dec 04</option>
+          <option value="4">Nov 23 - 27</option>
+          <option value="5">Nov 16 - 20</option>
         </select>
         
         <div id="treeTitle">
@@ -228,24 +231,43 @@
     <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
     
     <!--<script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>-->
-    <script type="text/javascript" src="TreemapWithHeader.js">
+
+    <script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js">
     <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
-        d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json", function(result) {
+        d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict121418.json", function(result) {
                 render_treemap(result, "1");
                 });
         var treeFile;
         var lineFile;
+        var streamFile;
         function changeInput(slt) {
             
             switch (slt) {
             case "1":
-             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json"; 
-             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/linechart120711.json";
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict121418.json"; 
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart121418.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream121418.json";
              break;
             case "2":
-             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict121418.json" ;
-             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/linechart121418.json";
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict120711.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart120711.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream120711.json";
+             break;
+             case "3":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict123004.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart123004.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream123004.json";
+             break;
+             case "4":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict112327.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart112327.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
+             break;
+             case "5":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict111620.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
              break;
         
 
@@ -269,14 +291,29 @@
      var stream;
      switch (slt) {
          case "1":
-             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=11&f=2015&g=d&a=11&b=5&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
-             line  = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/linechart120711.json";
-             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/stream120711.json";
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line  = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart121418.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream121418.json";
              break;
          case "2":
-             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
-             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/linechart121418.json";
-             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/stream121418.json";
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=11&f=2015&g=d&a=11&b=15&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart120711.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream120711.json";
+             break;
+            case "3":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=04&f=2015&g=d&a=10&b=28&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart123004.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream123004.json";
+             break;
+             case "4":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=27&f=2015&g=d&a=10&b=21&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart112327.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
+             break;
+             case "5":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=20&f=2015&g=d&a=10&b=14&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
              break;
 
      }
