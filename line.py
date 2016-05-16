@@ -36,7 +36,7 @@ s4 = 0
 for s4 in range(thuStartIndex, lines.__len__() - 1):
 	if(lines[s4].find(fri1s) != -1):
 		break
-firStartIndex = s4
+friStartIndex = s4
 
 for i in range(0, tueStartIndex - 1):
         data = json.loads(lines[i])
@@ -122,7 +122,7 @@ for i in range(thuStartIndex, friStartIndex):
                         else:
                                 symbolDict['THU'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
-for i in range(firStartIndex, lines.__len__() - 1):
+for i in range(friStartIndex, lines.__len__() - 1):
         data = json.loads(lines[i])
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
@@ -155,9 +155,9 @@ for WEEKDAY in symbolDict:
                     weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
                                                                     'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
 
-weeklySList = []
-for SYMBOL in weeklySDict:
-    weeklySList.append({SYMBOL: weeklySDict[SYMBOL]})
+#weeklySList = []
+#for SYMBOL in weeklySDict:
+#    weeklySList.append({SYMBOL: weeklySDict[SYMBOL]})
 
 with open('linechart.json', 'w') as f:
-        json.dump(weeklySList,f)
+        json.dump(weeklySDict,f)
