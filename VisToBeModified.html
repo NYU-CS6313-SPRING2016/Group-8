@@ -549,14 +549,14 @@ d3.json(line, function(error, data) {
 <script>
     
     var color = d3.scale.linear()
-            .domain([0,2,4,6,8,10,15,18,20,30,100])
+            .domain([0,20,40,60,80,100,150,180,200,300,400])
             .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
 d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/wordCloudWeek120711.json",function(data){
     console.log(data);
     d3.layout.cloud().size([400, 400])
             .words(data)
             .rotate(0)
-            .fontSize(function(d) { return d.size/4; })
+            .fontSize(function(d) { return Math.sqrt(d.size); })
             .on("end", draw)
             .start();
 
@@ -572,7 +572,7 @@ d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTw
                 .selectAll("text")
                 .data(words)
                 .enter().append("text")
-                .style("font-size", function(d) { return d.size/4 + "px"; })
+                .style("font-size", function(d) { return Math.sqrt(d.size) + "px"; })
                 .style("fill", function(d, i) { return color(i); })
                 .attr("transform", function(d) {
                     return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
