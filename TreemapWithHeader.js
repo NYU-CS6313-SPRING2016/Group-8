@@ -1,9 +1,11 @@
-function render_treemap(data) {
+function render_treemap(data, slt) {
+   
 //    console.log("render_treemap >>");
+    
     d3.select("#treemap svg").remove();
 
     var supportsForeignObject = true;
-    var chartWidth = 700;       // treemap width
+    var chartWidth = 850;       // treemap width
     var chartHeight = 500;      // treemap height
     var xscale = d3.scale.linear().range([0, chartWidth]);
     var yscale = d3.scale.linear().range([0, chartHeight]);
@@ -102,7 +104,7 @@ function render_treemap(data) {
                     if (node !== d.parent) {
                         zoom(d.parent);
                     } else {
-                        changestock1(d);
+                        changestock(d, d.name, slt);
                     }
             })
             .on("dblclick", function(d){
@@ -358,4 +360,6 @@ function render_treemap(data) {
             d3.event.stopPropagation();
         }
     }
+
 }
+            
