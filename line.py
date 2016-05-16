@@ -155,6 +155,9 @@ for WEEKDAY in symbolDict:
                     weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
                                                                     'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
 
+weeklySList = []
+for SYMBOL in weeklySDict:
+    weeklySList.append({SYMBOL: weeklySDict[SYMBOL]})
 
 with open('linechart.json', 'w') as f:
-        json.dump(weeklySDict,f)
+        json.dump(weeklySList,f)
