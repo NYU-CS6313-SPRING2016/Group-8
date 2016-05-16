@@ -595,7 +595,7 @@ d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTw
     d3.layout.cloud().size([400, 400])
             .words(data)
             .rotate(0)
-            .fontSize(function(d) { return Math.sqrt(d.size); })
+            .fontSize(function(d) { return Math.sqrt(d.size) / 2; })
             .on("end", draw)
             .start();
 
@@ -608,7 +608,7 @@ d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTw
                 .append("g")
                 // without the transform, words words would get cutoff to the left and top, they would
                 // appear outside of the SVG area
-                .attr("transform", "translate(100,100)")
+                .attr("transform", "translate(150,150)")
                 .selectAll("text")
                 .data(words)
                 .enter().append("text")
