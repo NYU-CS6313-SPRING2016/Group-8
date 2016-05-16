@@ -3,7 +3,7 @@ from collections import Counter
 import re
 commonList = ["", "the","and","to","poop","i","me","my","myself","we","us","our","ours","ourselves","you","your","yours","yourself","yourselves","he","him","his","himself","she","her","hers","herself","it","its","itself","they","them","their","theirs","themselves","what","which","who","whom","whose","this","that","these","those","am","is","are","was","were","be","been","being","have","has","had","having","do","does","did","doing,will,would","should,can","could","ought","a","co","39","of","at","for","in","at","on","s","t","will","not","up","no","with","but","buy","if","from","1","new","just","today","news","now","by","2","12","15","m","as","so","can","or","all","time","about","see","going","here","0","3","d","already","http","7","4","10","u","00","5","8","an","some","one","day","k","go","think"]
 keyword={}
-topwords = 30
+topwords = 40
 txt = ""
 
 def openfile(filename):
@@ -25,8 +25,8 @@ def getwordbins(words):
             cnt[word] += 1
     return cnt
 
-filename = 'Nov-23-27.json'
-#filename = 'Dec-14-18.json'
+#filename = 'Nov-16-20.json'
+filename = 'Dec-30-04.json'
 fin = open(filename,'r')
 lines =  fin.readlines()
 
@@ -54,7 +54,7 @@ for SYMBOL in wordSDict:
         truncatedWordSDict[SYMBOL].append({'text': word, 'size': count})
 
 #with open('wordCloudData120711.json', 'w') as f:
-with open('wordCloudData112327.json', 'w') as f:
+with open('wordCloudData123004.json', 'w') as f:
     json.dump(truncatedWordSDict, f)
 
 for key, value in wholeWeekBin.most_common(topwords):
@@ -64,6 +64,6 @@ keywordList = []
 for TEXT in keyword:
     keywordList.append({'text': TEXT, 'size': keyword[TEXT]})
 
-with open('wordCloudWeek112327.json', 'w') as f:
-#with open('wordCloudWeek121418.json', 'w') as f:
+#with open('wordCloudWeek111620.json', 'w') as f:
+with open('wordCloudWeek123004.json', 'w') as f:
     json.dump(keywordList, f)
