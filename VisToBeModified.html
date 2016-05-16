@@ -133,23 +133,27 @@
             #stream {
                 position: absolute;
                 top:350;
-                left:870;
+                left:770;
                 height: 650;
-                width: 400;
+                width: 430;
                 overflow-y: scroll;
                 overflow: auto
                 
             }
             li {
-                margin-bottom:-5px;
+                margin-bottom:-2px;
                 margin-top:-2px;
                 
             }
             .message {
+                margin-bottom:-2px;
+                margin-top:-2px;
                 font-weight: 200;
                 font-size: 12;
             }
             #time {
+                margin-bottom:-2px;
+                margin-top:-2px;
                 font-weight: 150;
                 font-size: 12;
                 color: blue;
@@ -157,6 +161,8 @@
                 
             }
             #stmt {
+                margin-bottom:-2px;
+                margin-top:-2px;
                 font-weight: 150;
                 font-size: 12;
                 
@@ -190,7 +196,7 @@
         </div>
         
         <div id="treemap">
-            <svg width="800" height="550"></svg>
+            <svg width="800" height="500"></svg>
         </div>
         <div id="container" ></div>
         
@@ -221,7 +227,8 @@
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
     
-    <script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>
+    <!--<script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>-->
+    <script type="text/javascript" src="TreemapWithHeader.js">
     <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
         d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json", function(result) {
