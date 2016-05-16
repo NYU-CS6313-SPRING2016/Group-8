@@ -1,6 +1,7 @@
 import json
 #...
-inputFile = 'Dec-07-11.json'
+#inputFile = 'Dec-07-11.json'
+inputFile = 'Dec-14-18.json'
 fin = open(inputFile,'r')
 lines = fin.readlines()
 symbolDict = {}     # creat a new dict, symbolDict = dict()
@@ -100,6 +101,7 @@ for i in range(0,50):
                                                  'value': symbolDict[symbolList[i].symbol]['count'],
                                                  'title': symbolDict[symbolList[i].symbol]['title'],
                                                  'exchange': symbolDict[symbolList[i].symbol]['exchange'],
+                                                 's_id': symbolDict[symbolList[i].symbol]['id'],
                                                  'sentiment': symbolDict[symbolList[i].symbol]['sentiment'],
                                                  'relatedSymbols': symbolDict[symbolList[i].symbol]['relatedSymbolList']})
 #        sectorDict[symbolList[i].sector].append(symbolDict[symbolList[i].symbol])
@@ -109,6 +111,7 @@ for i in range(0,50):
                                                  'value': symbolDict[symbolList[i].symbol]['count'],
                                                  'title': symbolDict[symbolList[i].symbol]['title'],
                                                  'exchange': symbolDict[symbolList[i].symbol]['exchange'],
+                                                 's_id': symbolDict[symbolList[i].symbol]['id'],
                                                  'sentiment': symbolDict[symbolList[i].symbol]['sentiment'],
                                                  'relatedSymbols': symbolDict[symbolList[i].symbol]['relatedSymbolList']})
 
@@ -132,7 +135,8 @@ for SECTOR in sectorDict:
 #Set the value of first level 'children' to be sectorList
 treeDict['children'] = sectorList
 
-with open('TreemapDict120711.json', 'w') as f:
+#with open('TreemapDict120711.json', 'w') as f:
+with open('TreemapDict121418.json', 'w') as f:
 #    for item in treeDict.items():
         json.dump(treeDict, f)
 #        f.write('\n')
