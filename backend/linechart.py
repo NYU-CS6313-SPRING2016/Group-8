@@ -1,6 +1,6 @@
 import json
-#inputFile = 'Dec-07-11.json'
-inputFile = 'Nov-16-20.json'
+inputFile = 'Dec-30-04.json'
+#inputFile = 'Nov-23-27.json'
 fin = open(inputFile,'r')
 lines = fin.readlines()
 
@@ -10,11 +10,11 @@ lines = fin.readlines()
 #thursday = '2015-12-10'
 #friday = '2015-12-11'
 
-monday = '2015-11-16'
-tuesday = '2015-11-17'
-wednesday = '2015-11-18'
-thursday = '2015-11-19'
-friday = '2015-11-20'
+monday = '2015-11-30'
+tuesday = '2015-12-01'
+wednesday = '2015-12-02'
+thursday = '2015-12-03'
+friday = '2015-12-04'
 
 
 
@@ -179,5 +179,5 @@ for SYMBOL in weeklySDict:
     weeklySDict[SYMBOL].sort(key = lambda x: x['date'])
 
 #with open('linechart120711.json', 'w') as f:
-with open('linechart111620.json', 'w') as f:
+with open('linechart123004.json', 'w') as f:
         json.dump(weeklySDict,f)
