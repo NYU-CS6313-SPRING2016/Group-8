@@ -51,8 +51,8 @@
             #volume {
                 position: absolute;
                 top: 580;
-                left:465;
-                width: 400;
+                left:415;
+                width: 350;
                 height: 200
             }
             #sentimentTitle {
@@ -80,15 +80,15 @@
                 position:absolute;
                 top:760px;
                 left:10px;
-                width:430;
+                width:380;
                 height: 250;
             }
             #sentiment {
-                width:400;
+                width:350;
                 height:215;
                 position:absolute;
                 top: 785;
-                left: 465;
+                left: 415;
             }
             #treeTitle {
                 position: absolute;
@@ -110,7 +110,7 @@
                 top: 580;
                 left: 10;
                 height: 170;
-                width: 430;
+                width: 380;
             }
             #tooltip {
                 position: absolute;
@@ -141,10 +141,27 @@
                 
             }
             li {
-                margin-bottom:-8px;
+                margin-bottom:-5px;
                 margin-top:-2px;
                 
             }
+            .message {
+                font-weight: 200;
+                font-size: 12;
+            }
+            #time {
+                font-weight: 150;
+                font-size: 12;
+                color: blue;
+                
+                
+            }
+            #stmt {
+                font-weight: 150;
+                font-size: 12;
+                
+            }
+            
         </style>
     </head>
     
@@ -173,7 +190,7 @@
         </div>
         
         <div id="treemap">
-            <svg width="900" height="550"></svg>
+            <svg width="800" height="550"></svg>
         </div>
         <div id="container" ></div>
         
@@ -501,14 +518,22 @@ d3.json(line, function(error, data) {
                 .append("li")
                 .attr("class", "message")
                 .text(function(d) {return  d.body})
-                .append("tr")
-                 //.attr("class", "time")
-                .append("td")
-                .attr("class", "time")
-                .html(function(d) {return d.crated_at + "&nbsp&nbsp"})
-                .append("td")
-                .attr("class", "stmt")
-                .html(function(d) {return d.sentiment;});
+                .append("li")
+                
+                .text(function(d) {return "Sentiment: " + d.sentiment;})
+                .attr("id", "stmt")
+                .style('color', function(d) {
+                    
+                    if(d.sentiment === 'Bullish') {
+                        return "#55B816";
+                    } else {
+                        return "#F56856";
+                    }
+                })
+                .append("li")
+                .attr("id", "time")
+                .text(function(d) {return "Time: " + d.crated_at})
+                ;
     }
     
    
