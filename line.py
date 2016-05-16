@@ -4,12 +4,21 @@ inputFile = 'Dec-07-11.json'
 fin = open(inputFile,'r')
 lines = fin.readlines()
 
-symbolDict = {'MON': {}, 'TUE': {}, 'WED': {}, 'THU': {}, 'FRI': {}}
+monday = '2015-12-07'
+tuesday = '2015-12-08'
+wednesday = '2015-12-09'
+thursday = '2015-12-10'
+friday = '2015-12-11'
+
+
+
+symbolDict = {monday: {}, tuesday: {}, wednesday: {}, thursday: {}, friday: {}}
 weekdaysDict = {}
-tue1s = "2015-12-08T09:30"
-wed1s = "2015-12-09T09:30"
-thu1s = "2015-12-10T09:30"
-fri1s = "2015-12-11T09:30"
+startTime = 'T09:30'
+tue1s = tuesday + startTime
+wed1s = wednesday + startTime
+thu1s = thursday + startTime
+fri1s = friday + startTime
 tueStartIndex = 0
 wedStartIndex = 0
 thuStartIndex = 0
@@ -43,118 +52,119 @@ for i in range(0, tueStartIndex - 1):
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
                         #counting message volume of a symbol                                        
-                        if SYMBOL['symbol'] in symbolDict['MON']:
-                                symbolDict['MON'][SYMBOL['symbol']]['count'] += 1
+                        if SYMBOL['symbol'] in symbolDict[monday]:
+                                symbolDict[monday][SYMBOL['symbol']]['count'] += 1
                         else:
-                                symbolDict['MON'][SYMBOL['symbol']] = SYMBOL
-                                symbolDict['MON'][SYMBOL['symbol']]['count'] = 1
-                                symbolDict['MON'][SYMBOL['symbol']]['relatedSymbol'] = {}
-                                symbolDict['MON'][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
+                                symbolDict[monday][SYMBOL['symbol']] = SYMBOL
+                                symbolDict[monday][SYMBOL['symbol']]['count'] = 1
+                                symbolDict[monday][SYMBOL['symbol']]['relatedSymbol'] = {}
+                                symbolDict[monday][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
                         #counting sentiment value
                         if data['entities']['sentiment'] is not None:
                                 if data['entities']['sentiment']['basic'] == "Bearish":
-                                        symbolDict['MON'][SYMBOL['symbol']]['sentiment']['bearish'] += 1
+                                        symbolDict[monday][SYMBOL['symbol']]['sentiment']['bearish'] += 1
                                 elif data['entities']['sentiment']['basic'] == "Bullish":
-                                        symbolDict['MON'][SYMBOL['symbol']]['sentiment']['bullish'] += 1
+                                        symbolDict[monday][SYMBOL['symbol']]['sentiment']['bullish'] += 1
                         else:
-                                symbolDict['MON'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
+                                symbolDict[monday][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 for i in range(tueStartIndex, wedStartIndex - 1):
         data = json.loads(lines[i])
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
                         #counting message volume of a symbol                                        
-                        if SYMBOL['symbol'] in symbolDict['TUE']:
-                                symbolDict['TUE'][SYMBOL['symbol']]['count'] += 1
+                        if SYMBOL['symbol'] in symbolDict[tuesday]:
+                                symbolDict[tuesday][SYMBOL['symbol']]['count'] += 1
                         else:
-                                symbolDict['TUE'][SYMBOL['symbol']] = SYMBOL
-                                symbolDict['TUE'][SYMBOL['symbol']]['count'] = 1
-                                symbolDict['TUE'][SYMBOL['symbol']]['relatedSymbol'] = {}
-                                symbolDict['TUE'][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
+                                symbolDict[tuesday][SYMBOL['symbol']] = SYMBOL
+                                symbolDict[tuesday][SYMBOL['symbol']]['count'] = 1
+                                symbolDict[tuesday][SYMBOL['symbol']]['relatedSymbol'] = {}
+                                symbolDict[tuesday][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
                         #counting sentiment value
                         if data['entities']['sentiment'] is not None:
                                 if data['entities']['sentiment']['basic'] == "Bearish":
-                                        symbolDict['TUE'][SYMBOL['symbol']]['sentiment']['bearish'] += 1
+                                        symbolDict[tuesday][SYMBOL['symbol']]['sentiment']['bearish'] += 1
                                 elif data['entities']['sentiment']['basic'] == "Bullish":
-                                        symbolDict['TUE'][SYMBOL['symbol']]['sentiment']['bullish'] += 1
+                                        symbolDict[tuesday][SYMBOL['symbol']]['sentiment']['bullish'] += 1
                         else:
-                                symbolDict['TUE'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
+                                symbolDict[tuesday][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 for i in range(wedStartIndex, thuStartIndex - 1):
         data = json.loads(lines[i])
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
                         #counting message volume of a symbol                                        
-                        if SYMBOL['symbol'] in symbolDict['WED']:
-                                symbolDict['WED'][SYMBOL['symbol']]['count'] += 1
+                        if SYMBOL['symbol'] in symbolDict[wednesday]:
+                                symbolDict[wednesday][SYMBOL['symbol']]['count'] += 1
                         else:
-                                symbolDict['WED'][SYMBOL['symbol']] = SYMBOL
-                                symbolDict['WED'][SYMBOL['symbol']]['count'] = 1
-                                symbolDict['WED'][SYMBOL['symbol']]['relatedSymbol'] = {}
-                                symbolDict['WED'][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
+                                symbolDict[wednesday][SYMBOL['symbol']] = SYMBOL
+                                symbolDict[wednesday][SYMBOL['symbol']]['count'] = 1
+                                symbolDict[wednesday][SYMBOL['symbol']]['relatedSymbol'] = {}
+                                symbolDict[wednesday][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
                         #counting sentiment value
                         if data['entities']['sentiment'] is not None:
                                 if data['entities']['sentiment']['basic'] == "Bearish":
-                                        symbolDict['WED'][SYMBOL['symbol']]['sentiment']['bearish'] += 1
+                                        symbolDict[wednesday][SYMBOL['symbol']]['sentiment']['bearish'] += 1
                                 elif data['entities']['sentiment']['basic'] == "Bullish":
-                                        symbolDict['WED'][SYMBOL['symbol']]['sentiment']['bullish'] += 1
+                                        symbolDict[wednesday][SYMBOL['symbol']]['sentiment']['bullish'] += 1
                         else:
-                                symbolDict['WED'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
+                                symbolDict[wednesday][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 for i in range(thuStartIndex, friStartIndex):
         data = json.loads(lines[i])
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
                         #counting message volume of a symbol                                        
-                        if SYMBOL['symbol'] in symbolDict['THU']:
-                                symbolDict['THU'][SYMBOL['symbol']]['count'] += 1
+                        if SYMBOL['symbol'] in symbolDict[thursday]:
+                                symbolDict[thursday][SYMBOL['symbol']]['count'] += 1
                         else:
-                                symbolDict['THU'][SYMBOL['symbol']] = SYMBOL
-                                symbolDict['THU'][SYMBOL['symbol']]['count'] = 1
-                                symbolDict['THU'][SYMBOL['symbol']]['relatedSymbol'] = {}
-                                symbolDict['THU'][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
+                                symbolDict[thursday][SYMBOL['symbol']] = SYMBOL
+                                symbolDict[thursday][SYMBOL['symbol']]['count'] = 1
+                                symbolDict[thursday][SYMBOL['symbol']]['relatedSymbol'] = {}
+                                symbolDict[thursday][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
                         #counting sentiment value
                         if data['entities']['sentiment'] is not None:
                                 if data['entities']['sentiment']['basic'] == "Bearish":
-                                        symbolDict['THU'][SYMBOL['symbol']]['sentiment']['bearish'] += 1
+                                        symbolDict[thursday][SYMBOL['symbol']]['sentiment']['bearish'] += 1
                                 elif data['entities']['sentiment']['basic'] == "Bullish":
-                                        symbolDict['THU'][SYMBOL['symbol']]['sentiment']['bullish'] += 1
+                                        symbolDict[thursday][SYMBOL['symbol']]['sentiment']['bullish'] += 1
                         else:
-                                symbolDict['THU'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
+                                symbolDict[thursday][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 for i in range(friStartIndex, lines.__len__() - 1):
         data = json.loads(lines[i])
         if "symbols" in data:
                 for SYMBOL in data['symbols']:
                         #counting message volume of a symbol                                        
-                        if SYMBOL['symbol'] in symbolDict['FRI']:
-                                symbolDict['FRI'][SYMBOL['symbol']]['count'] += 1
+                        if SYMBOL['symbol'] in symbolDict[friday]:
+                                symbolDict[friday][SYMBOL['symbol']]['count'] += 1
                         else:
-                                symbolDict['FRI'][SYMBOL['symbol']] = SYMBOL
-                                symbolDict['FRI'][SYMBOL['symbol']]['count'] = 1
-                                symbolDict['FRI'][SYMBOL['symbol']]['relatedSymbol'] = {}
-                                symbolDict['FRI'][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
+                                symbolDict[friday][SYMBOL['symbol']] = SYMBOL
+                                symbolDict[friday][SYMBOL['symbol']]['count'] = 1
+                                symbolDict[friday][SYMBOL['symbol']]['relatedSymbol'] = {}
+                                symbolDict[friday][SYMBOL['symbol']]['sentiment'] = {'bearish': 0, 'bullish': 0, 'unknown': 0}
                         #counting sentiment value
                         if data['entities']['sentiment'] is not None:
                                 if data['entities']['sentiment']['basic'] == "Bearish":
-                                        symbolDict['FRI'][SYMBOL['symbol']]['sentiment']['bearish'] += 1
+                                        symbolDict[friday][SYMBOL['symbol']]['sentiment']['bearish'] += 1
                                 elif data['entities']['sentiment']['basic'] == "Bullish":
-                                        symbolDict['FRI'][SYMBOL['symbol']]['sentiment']['bullish'] += 1
+                                        symbolDict[friday][SYMBOL['symbol']]['sentiment']['bullish'] += 1
                         else:
-                                symbolDict['FRI'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
+                                symbolDict[friday][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 #convert symbolDict to the dict we need
 weeklySDict = {}
 for WEEKDAY in symbolDict:
         for SYMBOL in symbolDict[WEEKDAY]:
                 if SYMBOL in weeklySDict:
-                    weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
-                                                                    'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
+                    weeklySDict[SYMBOL].append({'date': WEEKDAY,
+                                                            'count': symbolDict[WEEKDAY][SYMBOL]['count'],
+                                                            'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])})
                 else:
-                    weeklySDict[SYMBOL] = {}
-                    weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
-                                                                    'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
-
+                    weeklySDict[SYMBOL] = []
+                    weeklySDict[SYMBOL].append({'date': WEEKDAY,
+                                                            'count': symbolDict[WEEKDAY][SYMBOL]['count'],
+                                                            'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])})
 #weeklySList = []
 #for SYMBOL in weeklySDict:
 #    weeklySList.append({SYMBOL: weeklySDict[SYMBOL]})
