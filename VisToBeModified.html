@@ -95,7 +95,19 @@
                 height: 300;
                 width: 500;
             }
-            
+            #tooltip {
+                position: absolute;
+                font-size: 10px;
+                top: 0;
+                left: 0;
+                background-color: rgba(255, 255, 255, 0.8);
+                padding: 3;
+                border: solid 1px black;
+                visibility: hidden;
+                transition: all 0.2s;
+                opacity: 1;
+                white-space: pre-line; /* enable '\n' as new line character. */
+            }
         </style>
     </head>
     
@@ -125,7 +137,7 @@
         </div>
         
         <div id="treemap">
-            <svg width="550" height="550"></svg>
+            <svg width="750" height="550"></svg>
         </div>
         <div id="container" ></div>
         <!-- <div id="sentiment"> </div> -->
@@ -136,7 +148,7 @@
             </div>
 
         </div>
-
+        <div id="tooltip">Tooltip</div>
         
     </body>
     
@@ -147,7 +159,7 @@
     <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
     <script type="text/javascript" src="TreemapWithHeader.js"></script>
     <script>
-        // var treemapdata;
+
         function changeInput(d) {
             if(d == "1") {
                 d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict120711.json", function(result) {
@@ -161,6 +173,7 @@
             }
         }
 
+        
 /*        
         function renderTreemap(i) {
             if(i == 1) {
