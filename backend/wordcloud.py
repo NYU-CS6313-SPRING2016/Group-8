@@ -25,7 +25,7 @@ def getwordbins(words):
             cnt[word] += 1
     return cnt
 
-filename = 'Dec-07-11.json'
+filename = 'Nov-23-27.json'
 #filename = 'Dec-14-18.json'
 fin = open(filename,'r')
 lines =  fin.readlines()
@@ -54,8 +54,8 @@ for SYMBOL in wordSDict:
         truncatedWordSDict[SYMBOL].append({'text': word, 'size': count})
 
 #with open('wordCloudData120711.json', 'w') as f:
-#with open('wordCloudData121418.json', 'w') as f:
-#    json.dump(truncatedWordSDict, f)
+with open('wordCloudData112327.json', 'w') as f:
+    json.dump(truncatedWordSDict, f)
 
 for key, value in wholeWeekBin.most_common(topwords):
     keyword[key]=value
@@ -64,6 +64,6 @@ keywordList = []
 for TEXT in keyword:
     keywordList.append({'text': TEXT, 'size': keyword[TEXT]})
 
-with open('wordCloudWeek120711.json', 'w') as f:
+with open('wordCloudWeek112327.json', 'w') as f:
 #with open('wordCloudWeek121418.json', 'w') as f:
     json.dump(keywordList, f)
