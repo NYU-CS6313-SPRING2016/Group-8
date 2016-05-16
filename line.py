@@ -169,5 +169,7 @@ for WEEKDAY in symbolDict:
 #for SYMBOL in weeklySDict:
 #    weeklySList.append({SYMBOL: weeklySDict[SYMBOL]})
 
+for SYMBOL in weeklySDict:
+    weeklySDict[SYMBOL].sort(key = lambda x: x['date'])
 with open('linechart.json', 'w') as f:
         json.dump(weeklySDict,f)
