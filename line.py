@@ -144,12 +144,17 @@ for i in range(firStartIndex, lines.__len__() - 1):
                                 symbolDict['FRI'][SYMBOL['symbol']]['sentiment']['unknown'] += 1
 
 #convert symbolDict to the dict we need
+weeklySDict = {}
 for WEEKDAY in symbolDict:
-        weekdaysDict[WEEKDAY] = []
-        for daySYMBOL in symbolDict[WEEKDAY]:
-                weekdaysDict[WEEKDAY].append({'symbol': daySYMBOL,
-                                              'count': symbolDict[WEEKDAY][daySYMBOL]['count'],
-                                              'sentiment_value': (symbolDict[WEEKDAY][daySYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][daySYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][daySYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][daySYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][daySYMBOL]['sentiment']['unknown'])})
+        for SYMBOL in symbolDict[WEEKDAY]:
+                if SYMBOL in weeklySDict:
+                    weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
+                                                                    'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
+                else:
+                    weeklySDict[SYMBOL] = {}
+                    weeklySDict[SYMBOL][WEEKDAY] = {'count': symbolDict[WEEKDAY][SYMBOL]['count'],
+                                                                    'sentiment_value': (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] - symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish']) / (symbolDict[WEEKDAY][SYMBOL]['sentiment']['bullish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['bearish'] + symbolDict[WEEKDAY][SYMBOL]['sentiment']['unknown'])}
+
 
 with open('linechart.json', 'w') as f:
-        json.dump(weekdaysDict,f)
+        json.dump(weeklySDict,f)
