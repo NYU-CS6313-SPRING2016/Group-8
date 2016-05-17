@@ -103,7 +103,7 @@
             #cloudTitle {
                 position: absolute;
                 top:25;
-                left:870;
+                left:930;
             }
             #chartContainer {
                 position: absolute;
@@ -128,9 +128,10 @@
             #cloud {
                 position: absolute;
                 top:50;
-                left:770;
-                height: 350;
+                left:750;
+                height: 400;
                 width:400;
+                font-family: "Arial";
             }
             #stream {
                 position: absolute;
@@ -337,10 +338,10 @@
      $(function() {
 
 
-         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(data) {
+         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(d) {
 
              //console.log(data.query.results);
-             var data = data.query.results.row;
+             var data = d.query.results.row;
              data = data.splice(1, data.length);
              //console.log(data);
 
