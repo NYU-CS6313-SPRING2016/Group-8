@@ -359,7 +359,7 @@ function render_treemap(data, slt) {
                 } else if (d.sentiment.sentiment_value > 0) {
                     return "#AAEB9D";   // bull 7FE381
                 } else {
-                    return "#F595A0";   // bear
+                    return "#F78F8F";   // bear
                 }        
                 // return d.children ? "#777777" : color(d.parent.name);
             });
