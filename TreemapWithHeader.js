@@ -5,8 +5,8 @@ function render_treemap(data, slt) {
     d3.select("#treemap svg").remove();
 
     var supportsForeignObject = true;
-    var chartWidth = 750;       // treemap width
-    var chartHeight = 500;      // treemap height
+    var chartWidth = 500;       // treemap width
+    var chartHeight = 300;      // treemap height
     var xscale = d3.scale.linear().range([0, chartWidth]);
     var yscale = d3.scale.linear().range([0, chartHeight]);
     var color = d3.scale.category10();
