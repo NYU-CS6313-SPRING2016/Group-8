@@ -338,8 +338,10 @@
      $(function() {
 
 
-         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function(d) {
-
+         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function( d) {
+             // if(error) {
+             //    alert("aa");
+             // }
              //console.log(data.query.results);
              var data = d.query.results.row;
              data = data.splice(1, data.length);
@@ -389,7 +391,7 @@
      //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
 
      var da = a;
-     //      console.log(a)
+    //console.log(da)
      var bardata = [];
      var arr1 = da.relatedSymbols;
      //console.log(b)         
@@ -439,7 +441,28 @@
              dataPoints: bardata,
              click: function(e) {
                  console.log(e);
-                 changestock(a, e.dataPoint.indexLabel, slt);
+                 var newName = e.dataPoint.indexLabel
+                 console.log(a);
+                 var pArr = a.parent.parent.children;
+                 console.log(pArr);
+                 var newEntry ;
+                 console.log(pArr);
+                 for(var i = 0; i < 7; i++) {
+                    var tmp = pArr[i].children;
+                    for(var j = 0; j < tmp.length; j++){
+                        if (tmp[j].name === newName) {
+                        newEntry = tmp[j];
+                        break;
+                    }
+                    
+                    }
+                 }
+                 if(newEntry == null) {
+                    alert("This Stock is not in Weekly Hotest Stock");
+                 }
+                
+                 //console.log(e);
+                 changestock(newEntry, newName, slt);
              }
 
          }]
@@ -456,9 +479,9 @@
 d3.json(line, function(error, data) {
     var str = "";
     str = name;
-    console.log(name);
+    //console.log(name);
     var a = data[name];
-    console.log(a);
+    //console.log(a);
     var volume = [];
     var senti = [];
     for (i = 0; i < a.length; i++) {
