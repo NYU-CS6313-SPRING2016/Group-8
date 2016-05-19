@@ -232,6 +232,7 @@
           <option value="3">Nov 30 - Dec 04</option>
           <option value="4">Nov 23 - 27</option>
           <option value="5">Nov 16 - 20</option>
+          <option value="6">Nov 09 - 13</option>
         </select>
         
         <div id="treeTitle">
@@ -326,13 +327,17 @@
              streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
              wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek112327.json";
              break;
+
              case "5":
              treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict111620.json" ;
              lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
              streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
              wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek111620.json";
              break;
-        
+             
+             case "6":
+             treeFile = "TreemapDict110913.json" ;
+             break;
 
      }
             
@@ -388,6 +393,7 @@
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
              word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData111620.json"
              break;
+
 
      }
      d3.json(word, function(result) {
