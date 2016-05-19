@@ -217,35 +217,42 @@
 
             #legend {
                 position: absolute;
-                left: 30;
-                top: 600;
-                width: 100;
-                height: 30;
+                left: 5px;
+                top: 550px;
+                /*width: 100px;
+                height: 30px;*/
                 margin-bottom:2;
                 margin-top:2;                
             }
             .legend {
-              padding-top: 6;
-              margin-bottom: 0;
+              padding-top: 0px;
+              margin-bottom: 0px;
               float: right;
               list-style: none outside;
               opacity: 0;
               /*transition: opacity 0.9s linear;*/
             }
             .legend li {
-                border: 1px solid #262626;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-left: 3px;
+                padding-right: 3px;
                 float: left;
-                font-size: 8px;
-                line-height: 13px;
+                font-size: 12px;
+                line-height: 15px;
                 text-align: center;
                 min-width: 40px;
                 width: auto;
+                font-family:Arial,Helvetica,sans-serif;
+                font-weight:200;
             }
-            .legend_bullish{
-                background-color: #FA9B9B;
+            .legend_bull{
+                border: 1px solid #262626;
+                background-color: #AAEB9D; /*red #FA9B9B*/
             }
-            .legend_bearish{
-                background-color: #70AAFA;
+            .legend_bear{
+                border: 1px solid #262626;
+                background-color: #F78F8F;  /*green #70AAFA*/
             }
             
         </style>
@@ -265,7 +272,6 @@
           <option value="3">Nov 30 - Dec 04</option>
           <option value="4">Nov 23 - 27</option>
           <option value="5">Nov 16 - 20</option>
-          <option value="6">Nov 09 - 13</option>
         </select>
         
         <div id="treeTitle">
@@ -303,7 +309,14 @@
             
             <li>
         </div>
-        <div id="legend"></div>
+        <div id="legend">
+            <ul class="legend" style="opacity: 1">
+              <li class="legend_text">Color: </li>
+              <li class="legend_bull">bullish</li>
+              <li class="legend_bear">bearish</li>
+              <li class="legend_text">Size: Comment Volume</li>
+            </ul>
+        </div>
         <div id="streamTitle"></div>
         <div id="wordTitle">Weekly Key Words</div>
         <div id="wordContainer"><div id="word"></div>
@@ -318,7 +331,7 @@
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
     
-    <script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>
+    <script type="text/javascript" src="TreemapWithHeader.js"></script>
 
     
     <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -385,11 +398,6 @@
     
         }
 
-        
-
-        
-        
-    
        function changestock(a, name, slt ) {
         document.getElementById("streamTitle").innerHTML = name + "'s Stream";
      var temp;
@@ -729,30 +737,15 @@ d3.json(line, function(error, data) {
                 .style('color', function(d) {
                     
                     if(d.sentiment === 'Bullish') {
-                        return "#FA9B9B";   //"0 0 10px #55B816";
+                        return "#55B816";   //"0 0 10px #55B816";
                     } else {
-                        return "#70AAFA";   //"0 0 10px #F56856";
+                        return "#FA9B9B";   //"0 0 10px #F56856";
                     }
                 })                
                 //.style("font-weight", "600")
                 //.style("font-size", "16");                ;
     }
 }
-        //draw legend for treemap
-        var legend = d3.select("#legend");
-        legend.append("ul")
-                .attr("class", "legend")
-                .append("li")
-                .text("bullish")
-                .attr("class", "legend_bull")
-//                .style('list-style', "square")
-//                .style('fill', "#55B816")
-
-                .append("li")
-                .text("bearish")
-                .attr('class', "legend_bear")
-//                .style('list-style', "square")
-//                .style('fill', "#55B816")
     
    
        
