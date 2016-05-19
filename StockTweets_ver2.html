@@ -7,7 +7,7 @@
              body {
         font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
     }
-    .legend {
+/*    .legend {
         position: absolute;
         border: 1px solid #555555;
         border-radius: 5px 5px 5px 5px;
@@ -16,7 +16,7 @@
         padding: 8px;
         top:20;
         left:870;
-    }
+    }*/
     .bld {
         font-weight: bold;
     }
@@ -37,13 +37,12 @@
                 top:25;
             }
             
-            #message  {
+/*            #message  {
                 list-style: none;
-
                 padding: 15;
                 float:left;
                 font-size:14;
-            }
+            }*/
             #volTitle {
                 position: absolute;
                 top: 590;
@@ -149,7 +148,7 @@
                 
             }
             #streamTitle {
-                position: absolute;;
+                position: absolute;
                 top:60;
                 left: 915;
                 width: 300;
@@ -193,26 +192,60 @@
             }
             
             .message {
-                margin-bottom:-2px;
-                margin-top:-2px;
+                margin-bottom:0px;
+                margin-top:0px;
+                margin-left: 3px;
                 font-weight: 200;
                 font-size: 12;
+                color: black;
             }
-            #time {
-                margin-bottom:-2px;
-                margin-top:-2px;
+            .time {
+                margin-bottom:0px;
+                margin-top:0px;
+                margin-left: 10px;
                 font-weight: 150;
                 font-size: 12;
-                color: blue;
-                
-                
+                color: #C0C1C2;
             }
-            #stmt {
-                margin-bottom:-2px;
-                margin-top:-2px;
-                font-weight: 200;
-                font-size: 12;
-                
+            .stmt {
+                margin-bottom:6px;
+                margin-top:-1px;
+                margin-left: 1px;
+                font-weight: 300;
+                font-size: 14;               
+            }
+
+            #legend {
+                position: absolute;
+                left: 30;
+                top: 600;
+                width: 100;
+                height: 30;
+                margin-bottom:2;
+                margin-top:2;                
+            }
+            .legend {
+              padding-top: 6;
+              margin-bottom: 0;
+              float: right;
+              list-style: none outside;
+              opacity: 0;
+              /*transition: opacity 0.9s linear;*/
+            }
+            .legend li {
+                border: 1px solid #262626;
+                float: left;
+                font-size: 8px;
+                line-height: 13px;
+                text-align: center;
+                min-width: 40px;
+                width: auto;
+            }
+            .legend_bullish{
+                background-color: #FA9B9B;
+            }
+            .legend_bearish{
+                background-color: #70AAFA;
             }
             
         </style>
@@ -270,6 +303,7 @@
             
             <li>
         </div>
+        <div id="legend"></div>
         <div id="streamTitle"></div>
         <div id="wordTitle">Weekly Key Words</div>
         <div id="wordContainer"><div id="word"></div>
@@ -669,13 +703,7 @@ d3.json(line, function(error, data) {
                 
                 
     //             ;
-    // }
-     
-        
-        
-        
-    
-    
+    // }    
         
     function renderList(data) {
             //alert("a");
@@ -686,31 +714,45 @@ d3.json(line, function(error, data) {
             list.selectAll("li")
                 .data(data)
                 .enter()
-                .append("li")
-                .attr("id", "message")
                 
-                .text(function(d) {return  d.body})
+                 .append("li")
+                 .attr("class", "time")
+                 .text(function(d) {return d.crated_at;})
+
                 .append("li")
+                .attr("class", "message")                
+                .text(function(d) {return  d.body;})
                 
-                .text(function(d) {return  d.sentiment;})
-                .attr("id", "stmt")
-                .style('text-shadow', function(d) {
+                .append("li")
+                .text(function(d) {return  d.sentiment + "\n";})
+                .attr("class", "stmt")
+                .style('color', function(d) {
                     
                     if(d.sentiment === 'Bullish') {
-                        return "0 0 10px #55B816";
+                        return "#FA9B9B";   //"0 0 10px #55B816";
                     } else {
-                        return "0 0 10px #F56856";
+                        return "#70AAFA";   //"0 0 10px #F56856";
                     }
-                })
-                
-                .style("font-weight", "600")
-                .style("font-size", "16")
-                // .append("li")
-                // .attr("id", "time")
-                // .text(function(d) {return "Time: " + d.crated_at})
-                ;
+                })                
+                //.style("font-weight", "600")
+                //.style("font-size", "16");                ;
     }
 }
+        //draw legend for treemap
+        var legend = d3.select("#legend");
+        legend.append("ul")
+                .attr("class", "legend")
+                .append("li")
+                .text("bullish")
+                .attr("class", "legend_bull")
+//                .style('list-style', "square")
+//                .style('fill', "#55B816")
+
+                .append("li")
+                .text("bearish")
+                .attr('class', "legend_bear")
+//                .style('list-style', "square")
+//                .style('fill', "#55B816")
     
    
        
