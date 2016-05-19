@@ -112,7 +112,8 @@ function render_treemap(data, slt) {
                                                     .style('stroke-opacity', 0.5);
                         d3.select(this).style('stroke', 'black')
                                         .style('stroke-width', '3px')
-                                        .style('stroke-opacity', 1)
+                                        .style('stroke-opacity', 1);
+                        console.log(d);         
                         changestock(d, d.name, slt);
                     }
             })
