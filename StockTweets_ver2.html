@@ -219,10 +219,19 @@
                 position: absolute;
                 left: 5px;
                 top: 550px;
-                /*width: 100px;
-                height: 30px;*/
+                /*width: 300px;
+                height: 40px;*/
                 margin-bottom:2;
                 margin-top:2;                
+            }
+            #legend_stockprice {
+                position: absolute;
+                left: 5px;
+                top: 950px;
+                /*width: 250px;
+                height: 40px;*/
+                margin-bottom:2;
+                margin-top:2;
             }
             .legend {
               padding-top: 0px;
@@ -253,6 +262,13 @@
             .legend_bear{
                 border: 1px solid #262626;
                 background-color: #F78F8F;  /*green #70AAFA*/
+            }
+            .legend_rise {
+              border: 1px solid #262626;
+            }
+            .legend_fall {
+              border: 1px solid #262626;
+              background-color: #70AAFA; 
             }
             
         </style>
@@ -315,6 +331,14 @@
               <li class="legend_bull">bullish</li>
               <li class="legend_bear">bearish</li>
               <li class="legend_text">Size: Comment Volume</li>
+            </ul>
+        </div>
+
+        <div id="legend_stockprice">
+            <ul class="legend" style="opacity: 1">
+              <li class="legend_text">Daily Stock Price</li>
+              <li class="legend_rise">rise</li>
+              <li class="legend_fall">fall</li>
             </ul>
         </div>
         <div id="streamTitle"></div>
