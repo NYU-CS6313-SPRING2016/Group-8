@@ -398,14 +398,14 @@
 
 
          $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function( d) {
-             // if(error) {
-             //    alert("aa");
-             // }
+             if(d.query.results == null) {
+                alert("No price data for this stock.")
+             }
              console.log(d.query.results);
              var data = d.query.results.row;
              data = data.splice(1, data.length);
-             //console.log(data);
-
+             console.log(data);
+             
              var processedData = [];
              $(data).each(function(index, value) {
                  //console.log(Date.parse(value.Date).getTime());
