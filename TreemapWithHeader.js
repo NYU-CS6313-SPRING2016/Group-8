@@ -217,7 +217,7 @@ function render_treemap(data, slt) {
                             top: d3.event.clientY,
                             left: (d3.event.clientX + 10),
                             opacity: 1,
-                        }).text("Symbol: " + d.name + '\nTitle: ' + d.title + '\nSector: '+ d.parent.name+ '\nExchange: ' + d.exchange +'\nMessage Volume:' + d.value)     // inside the text parameter we do not call another function
+                        }).text("Symbol: " + d.name + '\nTitle: ' + d.title + '\nSector: '+ d.parent.name+ '\nExchange: ' + d.exchange)     // inside the text parameter we do not call another function
                     })
                     .on("mouseleave", function(d) {
                  //       unHighlight();
