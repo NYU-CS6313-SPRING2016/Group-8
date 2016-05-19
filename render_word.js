@@ -11,7 +11,7 @@ function render_word(data, name) {
                 .enter()
                 .append("li")
                 .attr("class", "word")
-                .text(function(d) {return  d.text});
+                .text(function(d) {if(d.text !== name.toLowerCase()) {return  d.text}});
         var count = d3.select("#count");
             count.selectAll("li").remove();
             count.selectAll("li")
