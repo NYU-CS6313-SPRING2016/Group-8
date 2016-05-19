@@ -5,8 +5,8 @@ function render_treemap(data, slt) {
     d3.select("#treemap svg").remove();
 
     var supportsForeignObject = true;
-    var chartWidth = 600;       // treemap width
-    var chartHeight = 400;      // treemap height
+    var chartWidth = 700;       // treemap width
+    var chartHeight = 500;      // treemap height
     var xscale = d3.scale.linear().range([0, chartWidth]);
     var yscale = d3.scale.linear().range([0, chartHeight]);
     var color = d3.scale.category10();
@@ -21,13 +21,13 @@ function render_treemap(data, slt) {
         .size([chartWidth, chartHeight])
         .sticky(true)
         .value(function(d) {
-            return d.value;
+            return Math.sqrt(Math.pow(d.value, 1.5));
         });
 
     var chart = d3.select("#treemap")
         .append("svg:svg")
-        .attr("width", 750)
-        .attr("height", chartHeight)
+        .attr("width", 700)
+        .attr("height", 500)
         .append("svg:g");
 
         node = root = data;
@@ -155,7 +155,7 @@ function render_treemap(data, slt) {
 //            .attr("x",function(d) {return d.x + d.dx/2})
 //            .attr("y",function(d) {return d.y + d.dy/2})
             .attr("text-anchor","middle")
-            .attr("font-size", "11")
+            .attr("font-size", "10")
             .attr("font-weight", "normal")
             .text(function(d) {
                 return d.name;        // symbol name

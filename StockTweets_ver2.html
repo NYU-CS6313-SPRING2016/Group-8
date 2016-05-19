@@ -37,8 +37,9 @@
                 top:25;
             }
             
-            .message  {
+            #message  {
                 list-style: none;
+
                 padding: 15;
                 float:left;
                 font-size:14;
@@ -48,12 +49,12 @@
                 top: 590;
                 left:465;
             }
-            #volume {
+            #sentiment {
                 position: absolute;
                 top: 580;
-                left:415;
+                left:370;
                 width: 350;
-                height: 200
+                height: 180
             }
             #sentimentTitle {
                 position: absolute;
@@ -65,8 +66,11 @@
             
             }
             #streamList {
-                height: 400;
+                height: 650;
                 width: 400;
+                padding-top: -5;
+                padding-bottom: -5;
+
                 //overflow-y: scroll;
                 overflow: auto;
                 
@@ -74,21 +78,22 @@
             #heatmap{
                 position:absolute;
                 top:120px;
+                
                 left:20px;
             }
             #container{
                 position:absolute;
-                top:760px;
+                top:600px;
                 left:10px;
-                width:380;
-                height: 250;
+                width:360;
+                height: 350;
             }
-            #sentiment {
+            #volume {
                 width:350;
-                height:215;
+                height:200;
                 position:absolute;
-                top: 785;
-                left: 415;
+                top: 765;
+                left: 370;
             }
             #treeTitle {
                 position: absolute;
@@ -107,10 +112,10 @@
             }
             #chartContainer {
                 position: absolute;
-                top: 580;
-                left: 10;
-                height: 170;
-                width: 380;
+                top: 770;
+                left: 735;
+                height: 200;
+                width: 450;
             }
             #tooltip {
                 position: absolute;
@@ -135,19 +140,58 @@
             }
             #stream {
                 position: absolute;
-                top:350;
-                left:770;
+                top:80;
+                left:900;
                 height: 650;
-                width: 430;
+                width: 300;
                 overflow-y: scroll;
                 overflow: auto
                 
             }
-            li {
-                margin-bottom:-2px;
-                margin-top:-2px;
+            #streamTitle {
+                position: absolute;;
+                top:60;
+                left: 915;
+                width: 300;
+                font-weight: 200;
+                font-size: 18;
+            }
+            #wordTitle {
+                position: absolute;
+                top:60;
+                left:720;
+                width:200;
+                font-weight: 200;
+                font-size: 18;
+            }
+            #wordContainer {
+                position: absolute;
+                top:90;
+                left:730;
+                width: 175;
+                height: 650;
+                overflow-y: scroll;
                 
             }
+            #word {
+                position: absolute;
+                
+                width: 90;
+                height: 650;
+                font-weight: 200;
+                margin-bottom:2px;
+                margin-top:2px;
+            }
+            #count {
+                position: absolute;
+                left: 90;
+                width: 60;
+                height: 650;
+                margin-bottom:2px;
+                margin-top:2px;
+
+            }
+            
             .message {
                 margin-bottom:-2px;
                 margin-top:-2px;
@@ -166,7 +210,7 @@
             #stmt {
                 margin-bottom:-2px;
                 margin-top:-2px;
-                font-weight: 150;
+                font-weight: 200;
                 font-size: 12;
                 
             }
@@ -202,7 +246,7 @@
         </div>
         
         <div id="treemap">
-            <svg width="800" height="500"></svg>
+            <svg width="700" height="500"></svg>
         </div>
         <div id="container" ></div>
         
@@ -215,7 +259,7 @@
 
         </div>
         <div id="tooltip">Tooltip</div>
-        <div id="cloud"></div>
+        <!--<div id="cloud"></div>-->
         <div id="sentiment"></div>
         <!-- <div id="sentimentTitle">Weekly Sentiment Trend:</div>
         <div id="volTitle">Weekly Comment Volume Trend: </div> -->
@@ -225,25 +269,30 @@
             
             <li>
         </div>
+        <div id="streamTitle"></div>
+        <div id="wordTitle">Weekly Key Words</div>
+        <div id="wordContainer"><div id="word"></div>
+        <div id="count"></div></div>
     </body>
     
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"> </script>
     <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    <script type="text/javascript" src="render_week_word.js"></script>
+    <script type="text/javascript" src="render_word.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
     <script src="http://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
     
     <!--<script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>-->
 
-    <script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js">
+    <!--<script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js">-->
+    <script type="text/javascript" src="TreemapWithHeader.js"></script>
     <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script>
         d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict121418.json", function(result) {
                 render_treemap(result, "1");
                 });
         d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek121418.json", function(result) {
-            render_week_word(result, "1");
+            render_word(result, "null");
         });
 
         var treeFile;
@@ -291,7 +340,7 @@
                 render_treemap(result, slt);
                 });
            d3.json(wordFile, function(result) {
-                render_week_word(result, slt);
+                render_word(result, "null");
            });
             
     
@@ -303,38 +352,47 @@
         
     
        function changestock(a, name, slt ) {
+        document.getElementById("streamTitle").innerHTML = name + "'s Stream";
      var temp;
      var line;
      var stream;
-     var word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek120711.json";
+     var word;
      switch (slt) {
          case "1":
              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
              line  = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart121418.json";
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream121418.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData121418.json"
              break;
          case "2":
              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=11&f=2015&g=d&a=11&b=15&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
              line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart120711.json";
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream120711.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData120711.json"
              break;
             case "3":
              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=04&f=2015&g=d&a=10&b=28&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
              line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart123004.json";
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream123004.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData123004.json"
              break;
              case "4":
              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=27&f=2015&g=d&a=10&b=21&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
              line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart112327.json";
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData112327.json"
              break;
              case "5":
              temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=20&f=2015&g=d&a=10&b=14&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
              line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
              stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData111620.json"
              break;
 
      }
+     d3.json(word, function(result) {
+                render_word(result[name], name);
+           });
            
      $(function() {
 
@@ -343,7 +401,7 @@
              // if(error) {
              //    alert("aa");
              // }
-             //console.log(data.query.results);
+             console.log(d.query.results);
              var data = d.query.results.row;
              data = data.splice(1, data.length);
              //console.log(data);
@@ -394,6 +452,7 @@
      var da = a;
     //console.log(da)
      var bardata = [];
+     
      var arr1 = da.relatedSymbols;
      //console.log(b)         
      for (var i = 0; i < arr1.length; i++) {
@@ -567,43 +626,44 @@ d3.json(line, function(error, data) {
 });
            
     //stream
-     // d3.json(stream, function(error, result){
-     //        //console.log(result[name]);
-     //        renderList(result[name]);
-     //    });
+     d3.json(stream, function(error, result){
+            //console.log(result[name]);
+            renderList(result[name]);
+        });
     
-//                .append("li")
-//                .attr("class", "sentiment")
-//                .html(function(d) {return "Sentiment: " + d.sentiment});
-//                .append("li")
-//                .attr("class", "symbol")
-//                .html(function(d) {return "Symbol: " + getSymbol(d)});
+           //     .append("li")
+           //     .attr("class", "sentiment")
+           //     .html(function(d) {return "Sentiment: " + d.sentiment});
+           //     .append("li")
+           //     .attr("class", "symbol")
+           //     .html(function(d) {return "Symbol: " + getSymbol(d)});
+           // }
                 
                 
            
        
-    d3.json(word, function(error, result) {
-        console.log(result);
-        renderWord(result);
-    });
+    // d3.json(word, function(error, result) {
+    //     console.log(result);
+    //     renderWord(result);
+    // });
 
-     //function
-    function renderWord(data) {
-            //alert("a");
-            var list = d3.select("#streamList");
-            //d3.selectAll("li").remove();
-            list.selectAll("li")
-                .remove();
-            list.selectAll("li")
-                .data(data)
-                .enter()
-                .append("li")
-                .attr("class", "message")
-                .text(function(d) {return  d.text + "  " + d.size;})
+    //  //function
+    // function renderWord(data) {
+    //         //alert("a");
+    //         var list = d3.select("#streamList");
+    //         //d3.selectAll("li").remove();
+    //         list.selectAll("li")
+    //             .remove();
+    //         list.selectAll("li")
+    //             .data(data)
+    //             .enter()
+    //             .append("li")
+    //             .attr("class", "message")
+    //             .text(function(d) {return  d.text + "  " + d.size;})
                 
                 
-                ;
-    }
+    //             ;
+    // }
      
         
         
@@ -621,23 +681,27 @@ d3.json(line, function(error, data) {
                 .data(data)
                 .enter()
                 .append("li")
-                .attr("class", "message")
+                .attr("id", "message")
+                
                 .text(function(d) {return  d.body})
                 .append("li")
                 
-                .text(function(d) {return "Sentiment: " + d.sentiment;})
+                .text(function(d) {return  d.sentiment;})
                 .attr("id", "stmt")
-                .style('color', function(d) {
+                .style('text-shadow', function(d) {
                     
                     if(d.sentiment === 'Bullish') {
-                        return "#55B816";
+                        return "0 0 10px #55B816";
                     } else {
-                        return "#F56856";
+                        return "0 0 10px #F56856";
                     }
                 })
-                .append("li")
-                .attr("id", "time")
-                .text(function(d) {return "Time: " + d.crated_at})
+                
+                .style("font-weight", "600")
+                .style("font-size", "16")
+                // .append("li")
+                // .attr("id", "time")
+                // .text(function(d) {return "Time: " + d.crated_at})
                 ;
     }
 }
