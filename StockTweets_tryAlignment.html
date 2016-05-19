@@ -1,0 +1,817 @@
+
+<html>
+    <head>
+        <title> StockTweets </title>
+        <style>
+            /*wordcloud*/
+             body {
+        font-family:"Lucida Grande","Droid Sans",Arial,Helvetica,sans-serif;
+    }
+/*    .legend {
+        position: absolute;
+        border: 1px solid #555555;
+        border-radius: 5px 5px 5px 5px;
+        font-size: 0.8em;
+        margin: 10px;
+        padding: 8px;
+        top:20;
+        left:870;
+    }*/
+    .bld {
+        font-weight: bold;
+    }
+            
+    /*finish wordcloud*/
+            li {
+                list-style: none;
+            }
+            #week {
+                position: absolute;
+                left:10;
+                top:25;
+                    
+            }
+            #weekSelection {
+                position:absolute;
+                left:180;
+                top:25;
+            }
+            
+/*            #message  {
+                list-style: none;
+                padding: 15;
+                float:left;
+                font-size:14;
+            }*/
+            #volTitle {
+                position: absolute;
+                top: 590;
+                left:465;
+            }
+            #sentiment {
+                position: absolute;
+                top: 770;
+                left:370;
+                width: 410;
+                height: 200
+            }
+            #sentimentTitle {
+                position: absolute;
+                font-size: 18;
+                font-weight: 600;
+                top: 7;
+                left: 465;
+            }
+            
+            }
+            #streamList {
+                height: 650;
+                width: 400;
+                padding-top: -5;
+                padding-bottom: -5;
+
+                //overflow-y: scroll;
+                overflow: auto;
+                
+            }
+            #heatmap{
+                position:absolute;
+                top:120px;
+                
+                left:20px;
+            }
+            #container{
+                position:absolute;
+                top:600px;
+                left:10px;
+                width:360;
+                height: 350;
+            }
+            #volume {
+                width:410;
+                height:200;
+                position:absolute;
+                top: 770;
+                left: 795;
+            }
+            #treeTitle {
+                position: absolute;
+                top:50;
+                left:10;
+            }
+            #priceTitle {
+                position: absolute;
+                top:630;
+                left:20;
+            }
+            #cloudTitle {
+                position: absolute;
+                top:25;
+                left:930;
+            }
+            #chartContainer {
+                position: absolute;
+                top: 580;
+                left: 370;
+                height: 180;
+                width: 350;
+            }
+            #tooltip {
+                position: absolute;
+                font-size: 10px;
+                top: 0;
+                left: 0;
+                background-color: rgba(255, 255, 255, 0.8);
+                padding: 3;
+                border: solid 1px black;
+                visibility: hidden;
+                transition: all 0.2s;
+                opacity: 1;
+                white-space: pre-line; /* enable '\n' as new line character. */
+            }
+/*            #cloud {
+                position: absolute;
+                top:50;
+                left:750;
+                height: 400;
+                width:400;
+                font-family: "Arial";
+            }*/
+            #stream {
+                position: absolute;
+                top:80;
+                left:900;
+                height: 650;
+                width: 300;
+                overflow-y: scroll;
+                overflow: auto
+                
+            }
+            #streamTitle {
+                position: absolute;
+                top:60;
+                left: 915;
+                width: 300;
+                font-weight: 200;
+                font-size: 18;
+            }
+            #wordTitle {
+                position: absolute;
+                top:60;
+                left:720;
+                width:200;
+                font-weight: 200;
+                font-size: 18;
+            }
+            #wordContainer {
+                position: absolute;
+                top:90;
+                left:730;
+                width: 175;
+                height: 650;
+                overflow-y: scroll;
+                
+            }
+            #word {
+                position: absolute;
+                
+                width: 90;
+                height: 650;
+                font-weight: 200;
+                margin-bottom:2px;
+                margin-top:2px;
+            }
+            #count {
+                position: absolute;
+                left: 90;
+                width: 60;
+                height: 650;
+                margin-bottom:2px;
+                margin-top:2px;
+
+            }
+            
+            .message {
+                margin-bottom:0px;
+                margin-top:0px;
+                margin-left: 3px;
+                font-weight: 200;
+                font-size: 12;
+                color: black;
+            }
+            .time {
+                margin-bottom:0px;
+                margin-top:0px;
+                margin-left: 10px;
+                font-weight: 150;
+                font-size: 12;
+                color: #C0C1C2;
+            }
+            .stmt {
+                margin-bottom:6px;
+                margin-top:-1px;
+                margin-left: 1px;
+                font-weight: 300;
+                font-size: 14;               
+            }
+
+            #legend {
+                position: absolute;
+                left: 5px;
+                top: 550px;
+                /*width: 300px;
+                height: 40px;*/
+                margin-bottom:2;
+                margin-top:2;                
+            }
+            #legend_stockprice {
+                position: absolute;
+                left: 5px;
+                top: 930px;
+                /*width: 250px;
+                height: 40px;*/
+                margin-bottom:2;
+                margin-top:2;
+            }
+            .legend {
+              padding-top: 0px;
+              margin-bottom: 0px;
+              float: right;
+              list-style: none outside;
+              opacity: 0;
+              /*transition: opacity 0.9s linear;*/
+            }
+            .legend li {
+                padding-top: 3px;
+                padding-bottom: 3px;
+                padding-left: 3px;
+                padding-right: 3px;
+                float: left;
+                font-size: 12px;
+                line-height: 15px;
+                text-align: center;
+                min-width: 40px;
+                width: auto;
+                font-family:Arial,Helvetica,sans-serif;
+                font-weight:200;
+            }
+            .legend_bull{
+                border: 1px solid #262626;
+                background-color: #AAEB9D; /*red #FA9B9B*/
+            }
+            .legend_bear{
+                border: 1px solid #262626;
+                background-color: #F78F8F;  /*green #70AAFA*/
+            }
+            .legend_rise {
+              border: 1px solid #262626;
+            }
+            .legend_fall {
+              border: 1px solid #262626;
+              background-color: #70AAFA; 
+            }
+            
+        </style>
+    </head>
+    
+    
+    <body>
+        <h1 align="center">Stock Twits Comments Analysis</h1>
+        
+        <div id="week">
+            Please select a week:
+        </div>
+        
+        <select id="weekSelection" onchange="changeInput(this.options[this.options.selectedIndex].value)">
+          <option value="1">Dec 14-18</option>
+          <option value="2">Dec 07-11</option>
+          <option value="3">Nov 30 - Dec 04</option>
+          <option value="4">Nov 23 - 27</option>
+          <option value="5">Nov 16 - 20</option>
+        </select>
+        
+        <div id="treeTitle">
+            Weekly Hotest Stocks:
+        </div>
+        <!-- <div style="width: 700px;" style="height: 400px;"  id = "stream"><li id="streamList">
+            
+        <li></div> -->
+        
+        <div id="priceTitle">
+            
+        </div>
+        
+        <div id="treemap">
+            <svg width="700" height="500"></svg>
+        </div>
+        <div id="container" ></div>
+        
+        <div id="chartContainer"></div>
+        <div style="width: 40%;">
+            <!-- <div class="legend">
+        Commonly used words are larger and slightly faded in color.  Less common words are smaller and darker.
+            </div> -->
+            <div id="cloudTitle"></div>
+
+        </div>
+        <div id="tooltip">Tooltip</div>
+        <!--<div id="cloud"></div>-->
+        <div id="sentiment"></div>
+        <!-- <div id="sentimentTitle">Weekly Sentiment Trend:</div>
+        <div id="volTitle">Weekly Comment Volume Trend: </div> -->
+        <div id="volume"></div>
+        <div id="stream">
+            <li id="streamList">
+            
+            <li>
+        </div>
+        <div id="legend">
+            <ul class="legend" style="opacity: 1">
+              <li class="legend_text">Color: </li>
+              <li class="legend_bull">bullish</li>
+              <li class="legend_bear">bearish</li>
+              <li class="legend_text">Size: Comment Volume</li>
+            </ul>
+        </div>
+
+        <div id="legend_stockprice">
+            <ul class="legend" style="opacity: 1">
+              <li class="legend_text">Daily Stock Price</li>
+              <li class="legend_rise">rise</li>
+              <li class="legend_fall">fall</li>
+            </ul>
+        </div>
+        <div id="streamTitle"></div>
+        <div id="wordTitle">Weekly Key Words</div>
+        <div id="wordContainer"><div id="word"></div>
+        <div id="count"></div></div>
+    </body>
+    
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"> </script>
+    <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="render_word.js"></script>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/d3.layout.cloud.js"></script>
+    
+    <script type="text/javascript" src="https://rawgit.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapWithHeader.js"></script>
+
+    
+    <script type="text/javascript" src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict121418.json", function(result) {
+                render_treemap(result, "1");
+                });
+        d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek121418.json", function(result) {
+            render_word(result, "null");
+        });
+
+        var treeFile;
+        var lineFile;
+        var streamFile;
+        var wordFile;
+        function changeInput(slt) {
+            
+            switch (slt) {
+            case "1":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict121418.json"; 
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart121418.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream121418.json";
+             wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek121418.json";
+             break;
+            case "2":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict120711.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart120711.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream120711.json";
+             wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek120711.json";
+             break;
+             case "3":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict123004.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart123004.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream123004.json";
+             wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek123004.json";
+             break;
+             case "4":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict112327.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart112327.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
+             wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek112327.json";
+             break;
+
+             case "5":
+             treeFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/TreemapDict111620.json" ;
+             lineFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
+             streamFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
+             wordFile = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek111620.json";
+             break;
+             
+             case "6":
+             treeFile = "TreemapDict110913.json" ;
+             break;
+
+     }
+            
+           d3.json(treeFile, function(result) {
+                render_treemap(result, slt);
+                });
+           d3.json(wordFile, function(result) {
+                render_word(result, "null");
+           });
+            
+    
+        }
+
+       function changestock(a, name, slt ) {
+        document.getElementById("streamTitle").innerHTML = name + "'s Stream";
+     var temp;
+     var line;
+     var stream;
+     var word;
+     switch (slt) {
+         case "1":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=18&f=2015&g=d&a=11&b=12&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line  = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart121418.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream121418.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData121418.json"
+             break;
+         case "2":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=11&f=2015&g=d&a=11&b=05&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart120711.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream120711.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData120711.json"
+             break;
+            case "3":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=11&e=04&f=2015&g=d&a=10&b=28&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart123004.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream123004.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData123004.json"
+             break;
+             case "4":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=27&f=2015&g=d&a=10&b=21&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart112327.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream112327.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData112327.json"
+             break;
+             case "5":
+             temp = "select Date, Open, High, Low, Close from csv where url='http://real-chart.finance.yahoo.com/table.csv?s=" + name + "&d=10&e=20&f=2015&g=d&a=10&b=14&c=2015&ignore=.csv' and columns='Date,Open,High,Low,Close,Volume,Adj Close'";
+             line = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/linechart111620.json";
+             stream = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/stream111620.json";
+             word = "https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudData111620.json"
+             break;
+
+
+     }
+     d3.json(word, function(result) {
+                render_word(result[name], name);
+           });
+           
+     $(function() {
+
+
+         $.getJSON("https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(temp) + "&format=json&callback=?", function( d) {
+             if(d.query.results == null) {
+                alert("No price data for this stock.")
+             }
+             console.log(d.query.results);
+             var data = d.query.results.row;
+             data = data.splice(1, data.length);
+             console.log(data);
+             
+             var processedData = [];
+             $(data).each(function(index, value) {
+                 //console.log(Date.parse(value.Date).getTime());
+                 //console.log(Date.parse(value.Date));
+                 processedData.push([Date.parse(value.Date), parseFloat(value.Open), parseFloat(value.High), parseFloat(value.Low), parseFloat(value.Close)]);
+             });
+             processedData = processedData.reverse();
+             //console.log(processedData);
+
+             // Create the chart
+             $('#container').highcharts('StockChart', {
+
+
+                 rangeSelector: {
+                     selected: 1
+                 },
+
+                 title: {
+                     text: name + "'s Weekly Stock Price",
+                     style: {
+                         fontFamily: "default",
+                         fontSize: 18,
+                         fontFamily: "Verdana",
+                         fontWeight: 'bold'
+                     }
+                 },
+
+                 series: [{
+                     type: 'candlestick',
+                     name: name + ' Stock Price',
+                     data: processedData,
+                     tooltip: {
+                         valueDecimals: 2
+                     }
+                 }]
+             });
+         });
+
+     });
+     //bar chart
+
+     //d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/TreemapDict.json",function(d){
+
+     var da = a;
+    //console.log(da)
+     var bardata = [];
+     
+     var arr1 = da.relatedSymbols;
+     //console.log(b)         
+     for (var i = 0; i < arr1.length; i++) {
+         bardata.push({
+             label: arr1[i].relate_count,
+             y: arr1[i].relate_count,
+             indexLabel: arr1[i].name
+         });
+         // console.log(arr1[i])
+     }
+
+
+
+     var chart = new CanvasJS.Chart("chartContainer", {
+         title: {
+             text: name + "'s Top 5 relative stock",
+             fontFamily: "default",
+             fontSize: 18,
+             fontFamily: "Verdana",
+
+         },
+         animationEnabled: true,
+         axisY: {
+             tickThickness: 0,
+             lineThickness: 0,
+             valueFormatString: " ",
+             gridThickness: 0
+         },
+         axisX: {
+             tickThickness: 0,
+             lineThickness: 0,
+             labelFontSize: 18,
+             labelFontColor: "Peru"
+
+         },
+         data: [{
+             indexLabelFontSize: 18,
+             toolTipContent: "<span style='\"'color: {color};'\"'><strong>{indexLabel}</strong></span><span style='\"'font-size: 20px; color:peru '\"'><strong>{y}</strong></span>",
+
+             indexLabelPlacement: "inside",
+             indexLabelFontColor: "white",
+             indexLabelFontWeight: 600,
+             indexLabelFontFamily: "Verdana",
+             color: "#A9D0F5",
+             type: "bar",
+             dataPoints: bardata,
+             click: function(e) {
+                 console.log(e);
+                 var newName = e.dataPoint.indexLabel
+                 console.log(a);
+                 var pArr = a.parent.parent.children;
+                 console.log(pArr);
+                 var newEntry ;
+                 console.log(pArr);
+                 for(var i = 0; i < 7; i++) {
+                    var tmp = pArr[i].children;
+                    for(var j = 0; j < tmp.length; j++){
+                        if (tmp[j].name === newName) {
+                        newEntry = tmp[j];
+                        break;
+                    }
+                    
+                    }
+                 }
+                 if(newEntry == null) {
+                    alert("This Stock is not in Weekly Hotest Stock");
+                 }
+                
+                 //console.log(e);
+                 changestock(newEntry, newName, slt);
+             }
+
+         }]
+     });
+
+     chart.render();
+
+
+
+     
+           
+           //line charts
+           
+d3.json(line, function(error, data) {
+    var str = "";
+    str = name;
+    //console.log(name);
+    var a = data[name];
+    //console.log(a);
+    var volume = [];
+    var senti = [];
+    for (i = 0; i < a.length; i++) {
+        var x = new Date(a[i].date);
+        var y = a[i].count;
+        volume[i] = {
+            x,
+            y
+        };
+    }
+    for (i = 0; i < a.length; i++) {
+        var x = new Date(a[i].date);
+        var y = a[i].sentiment_value;
+        senti[i] = {
+            x,
+            y
+        };
+    }
+    var sentiChart = new CanvasJS.Chart("sentiment", {
+        theme: "theme2",
+        title: {
+            text: name + "'s Weekly Sentiment Trend",
+            
+                         fontFamily: "default",
+                         fontSize: 18,
+                         fontFamily: "Verdana",
+                         fontWeight: 'bold'
+                    
+        },
+        animationEnabled: true,
+        axisX: {
+            valueFormatString: "MMM",
+            interval: 1,
+            intervalType: "day",
+            valueFormatString: "DD/MMM"
+        },
+        axisY: {
+            includeZero: false
+
+        },
+        data: [{
+            type: "line",
+            //lineThickness: 3,        
+            dataPoints: senti
+        }]
+    });
+
+    sentiChart.render();
+    
+    var volChart = new CanvasJS.Chart("volume", {
+        theme: "theme2",
+        title: {
+            text: name + "'s Weekly Volume Trend",
+            
+                     
+                         fontFamily: "default",
+                         fontSize: 18,
+                         fontFamily: "Verdana",
+                         fontWeight: 'bold'
+                     
+        },
+        animationEnabled: true,
+        axisX: {
+            valueFormatString: "MMM",
+            interval: 1,
+            intervalType: "day",
+            valueFormatString: "DD/MMM"
+        },
+        axisY: {
+            includeZero: false
+
+        },
+        data: [{
+            type: "line",
+            //lineThickness: 3,        
+            dataPoints: volume
+        }]
+    });
+
+    volChart.render();
+    
+});
+           
+    //stream
+     d3.json(stream, function(error, result){
+            //console.log(result[name]);
+            renderList(result[name]);
+        });
+    
+           //     .append("li")
+           //     .attr("class", "sentiment")
+           //     .html(function(d) {return "Sentiment: " + d.sentiment});
+           //     .append("li")
+           //     .attr("class", "symbol")
+           //     .html(function(d) {return "Symbol: " + getSymbol(d)});
+           // }
+                
+                
+           
+       
+    // d3.json(word, function(error, result) {
+    //     console.log(result);
+    //     renderWord(result);
+    // });
+
+    //  //function
+    // function renderWord(data) {
+    //         //alert("a");
+    //         var list = d3.select("#streamList");
+    //         //d3.selectAll("li").remove();
+    //         list.selectAll("li")
+    //             .remove();
+    //         list.selectAll("li")
+    //             .data(data)
+    //             .enter()
+    //             .append("li")
+    //             .attr("class", "message")
+    //             .text(function(d) {return  d.text + "  " + d.size;})
+                
+                
+    //             ;
+    // }    
+        
+    function renderList(data) {
+            //alert("a");
+            var list = d3.select("#streamList");
+            //d3.selectAll("li").remove();
+            list.selectAll("li")
+                .remove();
+            list.selectAll("li")
+                .data(data)
+                .enter()
+                
+                 .append("li")
+                 .attr("class", "time")
+                 .text(function(d) {return d.crated_at;})
+
+                .append("li")
+                .attr("class", "message")                
+                .text(function(d) {return  d.body;})
+                
+                .append("li")
+                .text(function(d) {return  d.sentiment + "\n";})
+                .attr("class", "stmt")
+                .style('color', function(d) {
+                    
+                    if(d.sentiment === 'Bullish') {
+                        return "#55B816";   //"0 0 10px #55B816";
+                    } else {
+                        return "#FA9B9B";   //"0 0 10px #F56856";
+                    }
+                })                
+                //.style("font-weight", "600")
+                //.style("font-size", "16");                ;
+    }
+}
+    
+   
+       
+    </script>
+<script>
+    
+//     var color = d3.scale.linear()
+//             //.domain([0,20,40,60,80,100,150,180,200,300,400])
+//             .domain([20,20,20,30,40,50,60,70,80,80,80])
+//             .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+// d3.json("https://raw.githubusercontent.com/NYU-CS6313-SPRING2016/Group-8-StockTweets/master/data/wordCloudWeek120711.json",function(data){
+//     console.log(data);
+//     d3.layout.cloud().size([400, 400])
+//             .words(data)
+//             .rotate(0)
+//             .fontSize(function(d) { return Math.sqrt(d.size) / 2; })
+//             .on("end", draw)
+//             .start();
+
+//     function draw(words) {
+//         d3.select("#cloud").append("svg")
+//                 .attr("width", 400)
+//                 .attr("height", 300)
+
+//                 .attr("class", "wordcloud")
+//                 .append("g")
+//                 // without the transform, words words would get cutoff to the left and top, they would
+//                 // appear outside of the SVG area
+//                 .attr("transform", "translate(150,150)")
+//                 .selectAll("text")
+//                 .data(words)
+//                 .enter().append("text")
+//                 .style("font-size", function(d) { return d.size  + "px"; })
+//                 .style("fill", function(d, i) { return color(i); })
+//                 .attr("transform", function(d) {
+//                     return "translate(" + [d.x , d.y ] + ")rotate(" + d.rotate + ")";
+//                 })
+
+//                 .text(function(d) { return d.text; });
+//     }
+// })
+</script>
+
+
+</html>
