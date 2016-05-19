@@ -79,7 +79,7 @@ function render_treemap(data, slt) {
             .attr("width", function(d) {
                 return Math.max(0.01, d.dx);
             })
-            .attr("height", function(d) { return d.dy; })
+            .attr("height", function(d) {return d.dy; })      // added "0.01, "
             .select(".labelbody .label")
             .text(function(d) {
                 return d.name;        // sector name
@@ -151,12 +151,12 @@ function render_treemap(data, slt) {
             .attr("class", "label")
 
 /*------------------------------------------------------text alignment problem is here!------------------------------------------------------*/
-            .append("text")
+//            .append("text")
 //            .attr("x",function(d) {return d.x + d.dx/2})
 //            .attr("y",function(d) {return d.y + d.dy/2})
-            .attr("text-anchor","middle")
-            .attr("font-size", "10")
-            .attr("font-weight", "normal")
+//            .attr("text-anchor","middle")
+//            .attr("font-size", "10")
+//            .attr("font-weight", "normal")
             .text(function(d) {
                 return d.name;        // symbol name
             })
@@ -357,9 +357,9 @@ function render_treemap(data, slt) {
                 if (d.children) {
                     return "#999999";
                 } else if (d.sentiment.sentiment_value > 0) {
-                    return "#A3E670";   // bull
+                    return "#FA9B9B";   // bull
                 } else {
-                    return "#F56856";   // bear
+                    return "#70AAFA";   // bear
                 }        
                 // return d.children ? "#777777" : color(d.parent.name);
             });
