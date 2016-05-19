@@ -20,7 +20,7 @@ function render_word(data, name) {
                 .append("li")
                 .attr("class", "count")
                 .text(function(d) {return d.size})
-                .style("color", "blue");
+                .style("color", "#C0C1C2");
     
 	
 }
