@@ -1,6 +1,6 @@
 function render_treemap(data, slt) {
    
-//    console.log("render_treemap >>");
+
     
     d3.select("#treemap svg").remove();
 
@@ -59,10 +59,7 @@ function render_treemap(data, slt) {
             .style("fill", "#999999");
         parentEnterTransition.append('foreignObject')
             .attr("class", "foreignObject")
-            .append("xhtml:body")
-            .attr("class", "labelbody")
-            .append("div")
-            .attr("class", "label");
+            
         // update transition
         var parentUpdateTransition = parentCells.transition().duration(transitionDuration);
         parentUpdateTransition.select(".cell")
@@ -80,7 +77,7 @@ function render_treemap(data, slt) {
                 return Math.max(0.01, d.dx);
             })
             .attr("height", function(d) {return d.dy; })      // added "0.01, "
-            .select(".labelbody .label")
+            
             .text(function(d) {
                 return d.name;        // sector name
             });
@@ -145,11 +142,7 @@ function render_treemap(data, slt) {
             .attr("height", function(d) {
                 return Math.max(0.01, d.dy);
             })
-            .append("xhtml:body")
-            .attr("class", "labelbody")
-            .append("div")
-            .attr("class", "label")
-
+            
 /*------------------------------------------------------text alignment problem is here!------------------------------------------------------*/
 //            .append("text")
 //            .attr("x",function(d) {return d.x + d.dx/2})
@@ -193,7 +186,7 @@ function render_treemap(data, slt) {
             .attr("height", function(d) {
                 return Math.max(0.01, d.dy);
             })
-            .select(".labelbody .label")
+           
             .text(function(d) {
                 return d.name;      // sector name
             })
@@ -289,7 +282,7 @@ function render_treemap(data, slt) {
                     // .style("display", "none");
                     .style("display", "");
             } else {
-                chart.selectAll(".cell.child .foreignObject .labelbody .label")
+                chart.selectAll(".cell.child .foreignObject ")
                     .style("display", "none");
             }
         }
@@ -304,7 +297,7 @@ function render_treemap(data, slt) {
                         .filter(function(d) {
                             return d.parent === self.node; // only get the children for selected group
                         })
-                        .select(".foreignObject .labelbody .label")
+                        .select(".foreignObject")
                         .style("color", function(d) {
                             return idealTextColor(color(d.parent.name));
                         });
@@ -321,7 +314,7 @@ function render_treemap(data, slt) {
                             .filter(function(d) {
                                 return d.parent === self.node; // only get the children for selected group
                             })
-                            .select(".foreignObject .labelbody .label")
+                            .select(".foreignObject")
                             .style("display", "");
                     }
                 }
@@ -334,7 +327,7 @@ function render_treemap(data, slt) {
             .attr("height", function(d) {
                 return d.children ? (ky*d.dy) : Math.max(0.01, ky * d.dy);
             })
-            .select(".labelbody .label")
+            
             .text(function(d) {
                 if (d.children) {
                     return d.name;      // sector name
